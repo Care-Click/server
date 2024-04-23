@@ -109,8 +109,28 @@ const sendReq = async (req, res) => {
 
 };
 const search = async (req, res) => {
+  try {
+    const { specialty } = req.params;
+    console.log(specialty);
+    const doctors = await prisma.doctor.findMany({
+      where: {
+        MedicalExp: {
+          speciality: { contains: specialty },
+        },
+      }, //include : {MedicalExp : true},
+    });
 
+    if (!doctors || doctors.length === 0) {
+      return res.status(404).json({ error: " not found" });
+    }
+
+    res.json(doctors);
+  } catch (error) {
+    console.error("Error fetching doctor:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
+
 const updateProfile = async (req, res) => {
   try {
     const { id } = req.params;
