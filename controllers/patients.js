@@ -1,20 +1,30 @@
 const prisma = require("../db/prisma");
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { upload } = require("../helper/helperFunction.js");
-
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const {
+  rundomNumber,
+  findNearestUsers,
+} = require("../helper/helperFunction.js");
 
 const signup = async (req, res) => {
+  console.log(req.body);
   try {
     let { password, date_of_birth } = req.body;
     date_of_birth = new Date(date_of_birth);
     date_of_birth = date_of_birth.toISOString();
     const newPatient = { ...req.body, date_of_birth };
-
+    newPatient.verification_code = rundomNumber();
     newPatient.password = bcrypt.hashSync(password, 8);
-
+    newPatient.role = "patient";
+    newPatient.location = JSON.stringify(newPatient.location);
     let result = await prisma.patient.create({ data: newPatient });
-
+    if (newPatient.Gender === "female") {
+      newPatient.profile_picture =
+        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-s3t28RdEh3CJTtyc5ixDrT1oRDoHGPENQQrhnz1kev-OO4tq";
+    } else {
+      newPatient.profile_picture =
+        "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRdQFCKS5R8Bt__gS9jeUmL2caFy32kcxLkNNsQQXd1c6HV0lrv";
+    }
     res.status(201).send("Patient  Registred ");
   } catch (error) {
     console.log(error);
@@ -73,36 +83,53 @@ const signin = async (req, res) => {
 
 const getAllDoctors = async (req, res) => {
   try {
-    let result = await prisma.doctor.findMany()
+    let result = await prisma.doctor.findMany();
     console.log(result);
-    res.status(200).json(result)
+    res.status(200).json(result);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ error: " not found." })
+    res.status(404).json({ error: " not found." });
   }
-}
+};
 
 const getOneDoctor = async (req, res) => {
   try {
     const { id } = req.params;
     const medexp = await prisma.medicalExp.findUnique({
       where: { doctor_id: parseInt(id) },
-
     });
     const doctor = await prisma.doctor.findUnique({
       where: { id: parseInt(id) },
-
     });
 
     if (!doctor) {
-      return res.status(404).json({ error: 'Doctor not found' });
+      return res.status(404).json({ error: "Doctor not found" });
     }
 
     res.json({ ...doctor, ...medexp });
   } catch (error) {
-    console.error('Error fetching doctor:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching doctor:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
+};
+
+const getNear = async (req, res) => {
+  try {
+    let result = await prisma.doctor.findMany();
+    console.log(result);
+    let docNear = findNearestUsers(
+      result,
+      35.81381620633338,
+      10.6001874506261,
+      (count = 3)
+    );
+    console.log(docNear);
+    res.send(docNear);
+  } catch (error) {
+    console.log(error);
+  }
+
+  
 };
 
 const sendReq = async (req, res) => {
@@ -176,7 +203,7 @@ const updateProfile = async (req, res) => {
     res.status(500).json(error);
   }
 };
-const getNear = async (req, res) => { };
+
 
 module.exports = {
   signup,
@@ -188,4 +215,3 @@ module.exports = {
   getNear,
   updateProfile,
 };
-
