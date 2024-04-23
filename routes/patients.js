@@ -20,6 +20,6 @@ router.get("/getAllDoctors",getAllDoctors);
 router.get("/getOneDoctor/:id", getOneDoctor);
 router.get("/search/:searched", search);
 router.post("/emergencyRequest", sendReq);
-router.post("/updateProfile", updateProfile);
+router.post("/updateProfile/:id", updateProfile);
 
 module.exports = router;
