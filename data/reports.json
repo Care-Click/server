@@ -1,0 +1,43 @@
+[
+    {
+      "Familial_Medical_History": ["Heart disease", "Diabetes"],
+      "Allergies": ["Pollen", "Penicillin"],
+      "PastIllness": ["Influenza", "Bronchitis"],
+      "Surgeries": ["Appendectomy"],
+      "Medications": ["Aspirin", "Insulin"],
+      "Chronic_Illness": ["Hypertension"],
+      "Imaging_test_results": [],
+      "request_id": 1
+    },
+    {
+      "Familial_Medical_History": ["Cancer"],
+      "Allergies": ["Shellfish"],
+      "PastIllness": ["Pneumonia"],
+      "Surgeries": [],
+      "Medications": ["Antibiotics"],
+      "Chronic_Illness": ["Asthma"],
+      "Imaging_test_results": [],
+      "request_id": 2
+    },
+    {
+      "Familial_Medical_History": ["Stroke"],
+      "Allergies": ["Dust"],
+      "PastIllness": [],
+      "Surgeries": [],
+      "Medications": ["Blood thinners"],
+      "Chronic_Illness": ["Arthritis"],
+      "Imaging_test_results": [],
+      "request_id": 3
+    },
+    {
+      "Familial_Medical_History": [],
+      "Allergies": [],
+      "PastIllness": ["Migraines"],
+      "Surgeries": ["Knee replacement"],
+      "Medications": ["Painkillers"],
+      "Chronic_Illness": [],
+      "Imaging_test_results": [],
+      "request_id": 4
+    }
+  ]
+  

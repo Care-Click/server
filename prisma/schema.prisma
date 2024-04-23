@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id              Int         @id @default(autoincrement()) @unique
+  FullName        String
+  date_of_birth   DateTime
+  email           String      @unique
+  password        String
+  phone_number    String
+  gender          String
+  profile_picture String
+  location        String
+  verified        Boolean
+  status          Boolean
+  role            String
+  patients        Patient[]   @relation("DoctorToPatient")
+  doctorRequests  Request[]   @relation("DoctorRequests")
+  MedicalExp      MedicalExp?
+}
+
+model MedicalExp {
+  id         Int     @id @default(autoincrement()) @unique
+  speciality String
+  id_card    String
+  bio        String
+  doctor     Doctor? @relation(fields: [doctor_id], references: [id])
+  doctor_id  Int?    @unique
+  medical_id String
+}
+
+model Request {
+  id        Int      @id @default(autoincrement()) @unique
+  message   String
+  status    String
+  createdAt DateTime @default(now())
+  report    Report?  @relation("RequestToReport")
+  report_id Int?
+  Doctor    Doctor?  @relation("DoctorRequests", fields: [doctorId], references: [id])
+  doctorId  Int?
+  Patient   Patient? @relation(fields: [patientId], references: [id])
+  patientId Int?
+}
+
+model Report {
+  id                       Int      @id @default(autoincrement()) @unique
+  Familial_Medical_History String[]
+  Allergies                String[]
+  PastIllness              String[]
+  Surgeries                String[]
+  Medications              String[]
+  Chronic_Illness          String[]
+  Imaging_test_results     String[]
+  request                  Request  @relation(name: "RequestToReport", fields: [request_id], references: [id])
+  request_id               Int      @unique
+}
+
+model Patient {
+  id                Int          @id @default(autoincrement()) @unique
+  FullName          String
+  date_of_birth     DateTime
+  email             String       @unique
+  password          String
+  phone_number      String
+  Gender            String
+  profile_picture   String
+  location          String
+  verification_code String
+  role              String
+  doctors           Doctor[]     @relation("DoctorToPatient")
+  requests          Request[]
+  medicalInfo       MedicalInfo?
+}
+model MedicalInfo {
+  id                       Int      @id @default(autoincrement()) @unique
+  Familial_Medical_History String[]
+  Allergies                String[]
+  PastIllness              String[]
+  Surgeries                String[]
+  Medications              String[]
+  Chronic_Illness          String[]
+  Imaging_test_results     String[]
+  patient                  Patient? @relation(fields: [patientId], references: [id])
+  patientId                Int?     @unique
+}

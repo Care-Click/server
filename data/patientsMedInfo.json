@@ -1,0 +1,122 @@
+[
+  {
+    "Familial_Medical_History": ["Heart disease"],
+    "Allergies": ["Pollen", "Dust"],
+    "PastIllness": ["Influenza", "Bronchitis"],
+    "Surgeries": ["Appendectomy", "Knee surgery"],
+    "Medications": ["Aspirin", "Antibiotics"],
+    "Chronic_Illness": ["Diabetes", "Hypertension"],
+    "Imaging_test_results": ["Normal MRI"],
+    "patientId": 1
+  },
+  {
+    "Familial_Medical_History": ["Cancer"],
+    "Allergies": ["Peanuts", "Shellfish"],
+    "PastIllness": ["Pneumonia", "Tuberculosis"],
+    "Surgeries": ["Knee replacement", "Gallbladder removal"],
+    "Medications": ["Ibuprofen", "Insulin"],
+    "Chronic_Illness": ["Hypertension", "Asthma"],
+    "Imaging_test_results": ["Abnormal CT scan"],
+    "patientId": 2
+  },
+  {
+    "Familial_Medical_History": ["Stroke"],
+    "Allergies": ["Shellfish", "Eggs"],
+    "PastIllness": ["Bronchitis", "Malaria"],
+    "Surgeries": ["Gallbladder removal", "Hip replacement"],
+    "Medications": ["Insulin", "Statins"],
+    "Chronic_Illness": ["Asthma", "Arthritis"],
+    "Imaging_test_results": ["Normal X-ray"],
+    "patientId": 3
+  },
+  {
+    "Familial_Medical_History": ["Alzheimer's"],
+    "Allergies": ["Dust mites", "Pets"],
+    "PastIllness": ["Malaria", "Tuberculosis"],
+    "Surgeries": ["Hip replacement", "Cataract surgery"],
+    "Medications": ["Statins", "Antidepressants"],
+    "Chronic_Illness": ["Arthritis", "Chronic kidney disease"],
+    "Imaging_test_results": ["Abnormal MRI"],
+    "patientId": 4
+  },
+  {
+    "Familial_Medical_History": ["Parkinson's"],
+    "Allergies": ["Mold", "Pollen"],
+    "PastIllness": ["Tuberculosis", "Rheumatoid arthritis"],
+    "Surgeries": ["Cataract surgery", "Hernia repair"],
+    "Medications": ["Antidepressants", "Beta-blockers"],
+    "Chronic_Illness": ["Chronic kidney disease", "Osteoporosis"],
+    "Imaging_test_results": ["Normal CT scan"],
+    "patientId": 5
+  },
+  {
+    "Familial_Medical_History": ["Epilepsy"],
+    "Allergies": ["Pets", "Dust mites"],
+    "PastIllness": ["Rheumatoid arthritis", "Lyme disease"],
+    "Surgeries": ["Hernia repair", "Tonsillectomy"],
+    "Medications": ["Beta-blockers", "Antihistamines"],
+    "Chronic_Illness": ["Osteoporosis", "Celiac disease"],
+    "Imaging_test_results": ["Abnormal X-ray"],
+    "patientId": 6
+  },
+  {
+    "Familial_Medical_History": ["Multiple sclerosis"],
+    "Allergies": ["Eggs", "Pollen"],
+    "PastIllness": ["Lyme disease", "E. coli infection"],
+    "Surgeries": ["Tonsillectomy", "Heart bypass surgery"],
+    "Medications": ["Antihistamines", "Antibiotics"],
+    "Chronic_Illness": ["Celiac disease", "Crohn's disease"],
+    "Imaging_test_results": ["Normal MRI"],
+    "patientId": 7
+  },
+  {
+    "Familial_Medical_History": ["Hemophilia"],
+    "Allergies": ["Latex", "Pollen"],
+    "PastIllness": ["Ulcer", "Chickenpox"],
+    "Surgeries": ["Heart bypass surgery", "Spinal fusion"],
+    "Medications": ["Antibiotics", "Steroids"],
+    "Chronic_Illness": ["Crohn's disease", "Hepatitis"],
+    "Imaging_test_results": ["Abnormal CT scan"],
+    "patientId": 8
+  },
+  {
+    "Familial_Medical_History": ["Leukemia"],
+    "Allergies": ["Soy", "Pollen"],
+    "PastIllness": ["Kidney stones", "E. coli infection"],
+    "Surgeries": ["Gastric bypass", "Lung transplant"],
+    "Medications": ["Painkillers", "Anticoagulants"],
+    "Chronic_Illness": ["Liver disease", "Sleep apnea"],
+    "Imaging_test_results":[ "Normal X-ray"],
+    "patientId": 9
+  },
+  {
+    "Familial_Medical_History": ["Huntington's disease"],
+    "Allergies": ["Fish", "Pollen"],
+    "PastIllness": ["Diarrhea", "Measles"],
+    "Surgeries": ["Lung transplant", "Appendectomy"],
+    "Medications": ["Antacids", "Antidepressants"],
+    "Chronic_Illness": ["Sleep apnea", "Obesity"],
+    "Imaging_test_results":[ "Abnormal MRI"],
+    "patientId": 10
+  },
+  {
+    "Familial_Medical_History": ["ALS (Amyotrophic Lateral Sclerosis)"],
+    "Allergies": ["Pollen", "Mold"],
+    "PastIllness": ["E. coli infection", "Chickenpox"],
+    "Surgeries": ["Spinal fusion", "Gallbladder removal"],
+    "Medications": ["Anticoagulants", "Steroids"],
+    "Chronic_Illness": ["Hepatitis", "Hypothyroidism"],
+    "Imaging_test_results": ["Normal CT scan"],
+    "patientId": 11
+  },
+  {
+    "Familial_Medical_History": ["Sickle cell disease"],
+    "Allergies": ["Penicillin", "Bees"],
+    "PastIllness": ["Chickenpox", "Measles"],
+    "Surgeries": ["Appendectomy", "Hip replacement"],
+    "Medications": ["Steroids", "Antibiotics"],
+    "Chronic_Illness": ["Hepatitis", "Hypothyroidism"],
+    "Imaging_test_results": ["Normal CT scan"],
+    "patientId": 12
+  }
+  ]
