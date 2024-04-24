@@ -4,7 +4,7 @@
     "status": "Pending",
     "createdAt": "2022-04-25T10:00:00Z",
     "report_id": null,
-    "doctorId": 1,
+    "doctorId": null,
     "patientId": 1
   },
   {
@@ -12,7 +12,7 @@
     "status": "Accepted",
     "createdAt": "2022-04-26T11:30:00Z",
     "report_id": 1,
-    "doctorId": 2,
+    "doctorId": null,
     "patientId": 2
   },
   {
@@ -20,7 +20,7 @@
     "status": "Pending",
     "createdAt": "2022-04-27T14:45:00Z",
     "report_id": null,
-    "doctorId": 3,
+    "doctorId": null,
     "patientId": 3
   },
   {
@@ -28,7 +28,7 @@
     "status": "Accepted",
     "createdAt": "2022-04-28T16:20:00Z",
     "report_id": 2,
-    "doctorId": 1,
+    "doctorId": null,
     "patientId": 4
   },
   {
@@ -36,7 +36,7 @@
     "status": "Pending",
     "createdAt": "2022-04-29T09:00:00Z",
     "report_id": null,
-    "doctorId": 2,
+    "doctorId": null,
     "patientId": 5
   },
   {
@@ -44,7 +44,7 @@
     "status": "Accepted",
     "createdAt": "2022-04-30T13:10:00Z",
     "report_id": 3,
-    "doctorId": 3,
+    "doctorId": null,
     "patientId": 6
   },
   {
@@ -52,7 +52,7 @@
     "status": "Pending",
     "createdAt": "2022-05-01T11:45:00Z",
     "report_id": null,
-    "doctorId": 1,
+    "doctorId": null,
     "patientId": 7
   },
   {
@@ -60,7 +60,7 @@
     "status": "Accepted",
     "createdAt": "2022-05-02T15:30:00Z",
     "report_id": 4,
-    "doctorId": 2,
+    "doctorId": null,
     "patientId": 8
   },
   {
@@ -68,7 +68,7 @@
     "status": "Pending",
     "createdAt": "2022-05-03T08:20:00Z",
     "report_id": null,
-    "doctorId": 3,
+    "doctorId": null,
     "patientId": 9
   },
   {
@@ -76,7 +76,7 @@
     "status": "Accepted",
     "createdAt": "2022-05-04T10:50:00Z",
     "report_id": 5,
-    "doctorId": 1,
+    "doctorId": null,
     "patientId": 10
   }
 ]

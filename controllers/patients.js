@@ -7,7 +7,6 @@ const {
 } = require("../helper/helperFunction.js");
 
 const signup = async (req, res) => {
-  console.log(req.body);
   try {
     let { password, date_of_birth } = req.body;
     date_of_birth = new Date(date_of_birth);
@@ -17,7 +16,6 @@ const signup = async (req, res) => {
     newPatient.password = bcrypt.hashSync(password, 8);
     newPatient.role = "patient";
     newPatient.location = JSON.stringify(newPatient.location);
-    let result = await prisma.patient.create({ data: newPatient });
     if (newPatient.Gender === "female") {
       newPatient.profile_picture =
         "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-s3t28RdEh3CJTtyc5ixDrT1oRDoHGPENQQrhnz1kev-OO4tq";
@@ -25,6 +23,8 @@ const signup = async (req, res) => {
       newPatient.profile_picture =
         "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRdQFCKS5R8Bt__gS9jeUmL2caFy32kcxLkNNsQQXd1c6HV0lrv";
     }
+    let result = await prisma.patient.create({ data: newPatient });
+   
     res.status(201).send("Patient  Registred ");
   } catch (error) {
     console.log(error);
@@ -128,6 +128,8 @@ const getNear = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+
+
 };
 
 const sendReq = async (req, res) => {
@@ -136,17 +138,18 @@ const sendReq = async (req, res) => {
       message: req.body.message,
       status: "pending",
       patientId: JSON.parse(req.params.id),
-      doctorId: null,
-    };
+      doctorId: null
+
+    }
     const request = await prisma.request.create({
       // let result = await prisma.patient.create({ data: newPatient });
 
-      data: newrequest,
-    });
-    res.status(201).json(request);
+      data: newrequest
+    })
+    res.status(201).json(request)
   } catch (error) {
     console.log(error);
-    res.status(401).json(error);
+    res.status(401).json(error)
   }
 };
 const search = async (req, res) => {
@@ -232,14 +235,14 @@ const getMedicalInfo = async (req, res) => {
     console.log(error);
     res.status(500).json(error);
   }
-};
+
+}
 
 module.exports = {
   signup,
   signin,
   getAllDoctors,
   getOneDoctor,
-  sendReq,
   search,
   getNear,
   updateProfile,
