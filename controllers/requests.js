@@ -1,6 +1,5 @@
 const prisma = require("../db/prisma");
 const jwt = require("jsonwebtoken");
-const sendReq = async (req, res) => {};
 const createReport = async (req, res) => {
   const { request } = req.params;
   const {
@@ -71,6 +70,29 @@ const getRequests = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
+  
+
+
+const sendReq = async (req, res) => {
+  try {
+    const newrequest = {
+      message: req.body.message,
+      status: "pending",
+      patientId: JSON.parse(req.params.id),
+      doctorId: null
+
+    }
+    const request = await prisma.request.create({
+      // let result = await prisma.patient.create({ data: newPatient });
+
+      data: newrequest
+    })
+    res.status(201).json(request)
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error)
+  }
+}
 module.exports = {
     getRequests,
   sendReq,

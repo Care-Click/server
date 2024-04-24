@@ -135,23 +135,6 @@ const createMedExp = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-const getOne = async (req, res) => {};
-
-const search = async (req, res) => {};
-
-const updatePatientMed = async (req, res) => {};
-
-
 const getPatientsToDoctor = async (req, res) => {
   try {
 
@@ -196,8 +179,6 @@ module.exports = {
   signin,
   getAllPatient,
   getPatientsToDoctor,
-  updatePatientMed,
-  search,
   createMedExp,
   
 };
