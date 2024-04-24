@@ -176,7 +176,7 @@ const handleReq = async (req, res) => {
 
 
 
-const sendReq = async (req, res) => {};
+const getOne = async (req, res) => {};
 
 const search = async (req, res) => {};
 

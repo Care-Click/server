@@ -129,28 +129,28 @@ const getNear = async (req, res) => {
     console.log(error);
   }
 
-  
+
 };
 
 const sendReq = async (req, res) => {
-  try{
- const newrequest = {
-  message : req.body.message ,
-  status : "pending" ,
-  patientId : JSON.parse(req.params.id) , 
-  doctorId : null 
+  try {
+    const newrequest = {
+      message: req.body.message,
+      status: "pending",
+      patientId: JSON.parse(req.params.id),
+      doctorId: null
 
- }
-  const request = await prisma.request.create({
-    // let result = await prisma.patient.create({ data: newPatient });
-    
-    data: newrequest
-  })
-  res.status(201).json(request)
-}catch (error) {
-  console.log(error);
-  res.status(401).json(error)
-}
+    }
+    const request = await prisma.request.create({
+      // let result = await prisma.patient.create({ data: newPatient });
+
+      data: newrequest
+    })
+    res.status(201).json(request)
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error)
+  }
 };
 const search = async (req, res) => {
   try {
@@ -221,6 +221,21 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const getMedicalInfo = async (req, res) => {
+  try {
+    let { id } = req.params
+    const medicalInfo = await prisma.medicalInfo.findUnique({
+      where: {
+        patientId: parseInt(id)
+      }
+    })
+    res.status(201).send(medicalInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+
+}
 
 module.exports = {
   signup,
@@ -231,4 +246,5 @@ module.exports = {
   search,
   getNear,
   updateProfile,
+  getMedicalInfo,
 };
