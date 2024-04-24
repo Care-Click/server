@@ -7,7 +7,6 @@ const {
   signin,
   getAllDoctors,
   getOneDoctor,
-  sendReq,
   search,
   getNear,
   updateProfile
@@ -18,8 +17,9 @@ router.post("/signin", signin);
 router.get("/getNearByDoctors", getNear);
 router.get("/getAllDoctors",getAllDoctors);
 router.get("/getOneDoctor/:id", getOneDoctor);
-router.get("/search/:specialty", search);
-router.post("/emergencyRequest", sendReq);
+
+router.get("/search/:searched", search);
+
 router.post("/updateProfile/:id", updateProfile);
 
 module.exports = router;
