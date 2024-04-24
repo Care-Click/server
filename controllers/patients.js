@@ -128,23 +128,46 @@ const getNear = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-}
+
+
+};
+
+const sendReq = async (req, res) => {
+  try {
+    const newrequest = {
+      message: req.body.message,
+      status: "pending",
+      patientId: JSON.parse(req.params.id),
+      doctorId: null
+
+    }
+    const request = await prisma.request.create({
+      // let result = await prisma.patient.create({ data: newPatient });
+
+      data: newrequest
+    })
+    res.status(201).json(request)
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error)
+  }
+};
 const search = async (req, res) => {
   try {
-    const { specialty } = req.params;
-    console.log(specialty);
+    const { speciality } = req.params;
+    console.log(speciality);
     const doctors = await prisma.doctor.findMany({
       where: {
         MedicalExp: {
-          speciality: { contains: specialty },
+          speciality: { contains: speciality },
         },
-      }, //include : {MedicalExp : true},
+      },
+      include: { MedicalExp: true },
     });
 
     if (!doctors || doctors.length === 0) {
       return res.status(404).json({ error: " not found" });
     }
-
     res.json(doctors);
   } catch (error) {
     console.error("Error fetching doctor:", error);
@@ -201,12 +224,12 @@ const updateProfile = async (req, res) => {
 
 const getMedicalInfo = async (req, res) => {
   try {
-    let { id } = req.params
+    let { id } = req.params;
     const medicalInfo = await prisma.medicalInfo.findUnique({
       where: {
-        patientId: parseInt(id)
-      }
-    })
+        patientId: parseInt(id),
+      },
+    });
     res.status(201).send(medicalInfo);
   } catch (error) {
     console.log(error);
@@ -214,7 +237,6 @@ const getMedicalInfo = async (req, res) => {
   }
 
 }
-
 
 module.exports = {
   signup,
