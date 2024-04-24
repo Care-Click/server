@@ -3,6 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const patientRouter = require("./routes/patients");
 const doctorRouter = require("./routes/doctors");
+const requestRouter = require("./routes/requests");
 
 var morgan = require("morgan");
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use("/api/patients", patientRouter);
 app.use("/api/doctors", doctorRouter);
+app.use("/api/requests", requestRouter);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
