@@ -174,13 +174,40 @@ const handleReq = async (req, res) => {
 }
 
 
-
-
 const sendReq = async (req, res) => {};
-
+const getOne = async (req, res) => {};
 const search = async (req, res) => {};
 
 const updatePatientMed = async (req, res) => {};
+
+
+const getPatientsToDoctor = async (req, res) => {
+  try {
+
+    const doctorId = parseInt(req.params.doctorId);  
+    if (!doctorId) {
+      return res.status(400).json({ message: 'Doctor ID must be provided' });
+    }
+
+    const doctor = await prisma.doctor.findUnique({
+      where: {
+        id: doctorId
+      },
+      include: {
+        patients: true,  
+      }
+    });
+
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+
+    res.status(200).json(doctor.patients);}
+  catch (err) {
+        console.log(err);
+        res.status(404).json({ error: " not found." });
+      }
+    }
 
 const getAllPatient = async (req, res) => {
   try {
@@ -198,6 +225,7 @@ module.exports = {
   getOne,
   signin,
   getAllPatient,
+  getPatientsToDoctor,
   updatePatientMed,
   search,
   handleReq,
