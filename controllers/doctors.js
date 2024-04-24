@@ -135,55 +135,6 @@ const createMedExp = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
-const getRequests = async (req, res) => {
-  try {
-    const { doctorId } = req.params;
-    // Fetch pending requests for the specified doctor
-    const pendingRequests = await prisma.request.findMany({
-      where: {
-        doctorId: parseInt(doctorId),
-        status: 'Pending'
-      }
-    });
-    res.status(200).json(pendingRequests);
-  } catch (error) {
-    console.error('Error fetching pending requests:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
-
-const handleReq = async (req, res) => {
-  try {
-    const { requestId } = req.params;
-    // Update the status of the request to 'Accepted'
-    const updatedRequest = await prisma.request.update({
-      where: {
-        id: parseInt(requestId)
-      },
-      data: {
-        status: 'Accepted'
-      }
-    });
-    res.status(201).json(updatedRequest);
-  } catch (error) {
-    console.error('Error updating request status:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
-
-
-
-
-
-const getOne = async (req, res) => {};
-
-const search = async (req, res) => {};
-
-const updatePatientMed = async (req, res) => {};
-
-
 const getPatientsToDoctor = async (req, res) => {
   try {
 
@@ -225,13 +176,9 @@ const getAllPatient = async (req, res) => {
 
 module.exports = {
   signup,
-  getOne,
   signin,
   getAllPatient,
   getPatientsToDoctor,
-  updatePatientMed,
-  search,
-  handleReq,
   createMedExp,
-  getRequests,
+  
 };
