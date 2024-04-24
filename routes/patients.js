@@ -14,13 +14,18 @@ const {
 } = require("../controllers/patients");
 
 router.post("/signup", signup);
-router.post("/signin", signin);
-router.get("/getNearByDoctors", getNear);
-router.get("/getAllDoctors",getAllDoctors);
-router.get("/getOneDoctor/:id", getOneDoctor);
-router.get("/getMedicalInfo/:id",getMedicalInfo)
 
-router.get("/search/:searched", search);
+router.post("/signin", signin);
+
+router.get("/getNearByDoctors", getNear);
+
+router.get("/getAllDoctors",getAllDoctors);
+
+router.get("/getOneDoctor/:id", getOneDoctor);
+
+router.get("/getMedicalInfo/:id",getMedicalInfo) 
+
+router.get("/search/:speciality", search);
 
 router.post("/updateProfile/:id", updateProfile);
 

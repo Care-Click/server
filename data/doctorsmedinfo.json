@@ -5,7 +5,7 @@
     "id_card": "azz",
     "bio": "Experienced cardiologist with a focus on heart health.",
     "medical_id": "MED-001",
-    "doctor_id": 1
+    "doctor_id": 38
   },
   {
    
@@ -13,7 +13,7 @@
     "id_card": "azz",
     "bio": "Dermatologist specializing in skin care and treatment.",
     "medical_id": "MED-002",
-    "doctor_id": 2
+    "doctor_id": 39
   },
   {
    
@@ -21,7 +21,7 @@
     "id_card": "azz",
     "bio": "Pediatrician dedicated to child healthcare and development.",
     "medical_id": "MED-003",
-    "doctor_id": 3
+    "doctor_id": 40
   },
   {
    
@@ -29,7 +29,7 @@
     "id_card": "azz",
     "bio": "Orthopedic surgeon focusing on bone and joint health.",
     "medical_id": "MED-004",
-    "doctor_id": 4
+    "doctor_id": 41
   },
   {
    
@@ -37,7 +37,7 @@
     "id_card": "azz",
     "bio": "Neurologist specializing in neurological disorders and treatment.",
     "medical_id": "MED-005",
-    "doctor_id": 5
+    "doctor_id": 42
   },
   {
    
@@ -45,7 +45,7 @@
     "id_card": "azz",
     "bio": "Gynecologist providing comprehensive women's healthcare.",
     "medical_id": "MED-006",
-    "doctor_id": 6
+    "doctor_id": 43
   },
   {
    
@@ -53,7 +53,7 @@
     "id_card": "azz",
     "bio": "Ophthalmologist specializing in eye care and vision.",
     "medical_id": "MED-007",
-    "doctor_id": 7
+    "doctor_id": 44
   },
   {
    
@@ -61,7 +61,7 @@
     "id_card": "azz",
     "bio": "Urologist focusing on urinary tract and reproductive health.",
     "medical_id": "MED-008",
-    "doctor_id": 8
+    "doctor_id": 45
   },
   {
    
@@ -69,7 +69,7 @@
     "id_card": "azz",
     "bio": "Endocrinologist specializing in hormone-related disorders.",
     "medical_id": "MED-009",
-    "doctor_id": 9
+    "doctor_id": 46
   },
   {
    
@@ -77,7 +77,7 @@
     "id_card": "azz",
     "bio": "Psychiatrist providing mental health diagnosis and treatment.",
     "medical_id": "MED-010",
-    "doctor_id": 10
+    "doctor_id": 47
   },
   {
    
@@ -85,7 +85,7 @@
     "id_card": "azz",
     "bio": "Oncologist specializing in cancer diagnosis and treatment.",
     "medical_id": "MED-011",
-    "doctor_id": 11
+    "doctor_id": 48
   },
   {
    
@@ -93,7 +93,7 @@
     "id_card": "azz",
     "bio": "Gastroenterologist focusing on digestive system health.",
     "medical_id": "MED-012",
-    "doctor_id": 12
+    "doctor_id": 49
   },
   {
    
@@ -101,6 +101,6 @@
     "id_card": "azz",
     "bio": "Pulmonologist specializing in respiratory system disorders.",
     "medical_id": "MED-013",
-    "doctor_id": 13
+    "doctor_id": 50
   }
 ] 
