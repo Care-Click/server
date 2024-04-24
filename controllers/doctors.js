@@ -4,15 +4,23 @@ const prisma = require("../db/prisma");
 const { PrismaClient } = require('@prisma/client');
 const { upload } = require("../helper/helperFunction.js");
 
-
-
 const signup = async (req, res) => {
-  let { password, date_of_birth, FullName, email, phone_number, gender, location } = req.body;
+  let {
+    password,
+    date_of_birth,
+    FullName,
+    email,
+    phone_number,
+    gender,
+    location,
+  } = req.body;
   date_of_birth = new Date(date_of_birth);
   date_of_birth = date_of_birth.toISOString();
   try {
     //checking if the email is already in use
-    const checkemail = await prisma.doctor.findUnique({ where: { email: email } });
+    const checkemail = await prisma.doctor.findUnique({
+      where: { email: email },
+    });
     if (checkemail) {
       return res.status(400).json({ error: "existing account  " });
     }
@@ -20,7 +28,9 @@ const signup = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 8);
     // Check if req.files is defined and contains the file buffer
     if (!req.files || !req.files[0].buffer) {
-      return res.status(400).json({ error: "Image buffer is missing from request" });
+      return res
+        .status(400)
+        .json({ error: "Image buffer is missing from request" });
     }
 
     // Assuming req.files contains the image buffer, adjust this accordingly based on your setup
@@ -37,10 +47,10 @@ const signup = async (req, res) => {
       phone_number,
       gender,
       location,
-      role: 'doctor', // Assuming doctor signup
+      role: "doctor", // Assuming doctor signup
       verified: true, // Verifie from the admin
       status: true,
-      profile_picture: imageUrl
+      profile_picture: imageUrl,
     };
 
     // Save doctor data to the database
@@ -64,8 +74,8 @@ const signin = async (req, res) => {
     // Retrieve doctor from the database by email
     const doctor = await prisma.doctor.findUnique({
       where: {
-        email: email
-      }
+        email: email,
+      },
     });
 
     // Check if doctor exists
@@ -93,7 +103,7 @@ const signin = async (req, res) => {
 
     let loggedUser = {
       id: doctor.id,
-      FullName: doctor.FullName
+      FullName: doctor.FullName,
     };
 
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
@@ -104,10 +114,10 @@ const signin = async (req, res) => {
 };
 
 const createMedExp = async (req, res) => {
-  let { speciality, bio, medical_id } = req.body
-  var { doctor_id } = req.params
-  doctor_id = JSON.parse(doctor_id)
-  const card = req.files[0].buffer
+  let { speciality, bio, medical_id } = req.body;
+  var { doctor_id } = req.params;
+  doctor_id = JSON.parse(doctor_id);
+  const card = req.files[0].buffer;
   const image = await upload(card);
   try {
     let medicalExp = await prisma.medicalExp.create({
@@ -116,33 +126,70 @@ const createMedExp = async (req, res) => {
         id_card: image,
         bio,
         doctor_id,
-        medical_id
-      }
-    })
+        medical_id,
+      },
+    });
     res.status(201).send("Medical Experience Added Succesfully");
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
   }
+};
+
+
+const getRequests = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    // Fetch pending requests for the specified doctor
+    const pendingRequests = await prisma.request.findMany({
+      where: {
+        doctorId: parseInt(doctorId),
+        status: 'Pending'
+      }
+    });
+    res.status(200).json(pendingRequests);
+  } catch (error) {
+    console.error('Error fetching pending requests:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-const getOne = async (req, res) => { };
+const handleReq = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    // Update the status of the request to 'Accepted'
+    const updatedRequest = await prisma.request.update({
+      where: {
+        id: parseInt(requestId)
+      },
+      data: {
+        status: 'Accepted'
+      }
+    });
+    res.status(201).json(updatedRequest);
+  } catch (error) {
+    console.error('Error updating request status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
-const sendReq = async (req, res) => { };
 
-const search = async (req, res) => { };
 
-const updatePatientMed = async (req, res) => { };
 
+const sendReq = async (req, res) => {};
+
+const search = async (req, res) => {};
+
+const updatePatientMed = async (req, res) => {};
 
 const getAllPatient = async (req, res) => {
   try {
-    let result = await prisma.patient.findMany()
+    let result = await prisma.patient.findMany();
     console.log(result);
-    res.status(200).json(result)
+    res.status(200).json(result);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ error: " not found." })
+    res.status(404).json({ error: " not found." });
   }
 };
 
@@ -153,6 +200,7 @@ module.exports = {
   getAllPatient,
   updatePatientMed,
   search,
-  sendReq,
+  handleReq,
   createMedExp,
+  getRequests,
 };
