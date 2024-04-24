@@ -8,7 +8,7 @@
       "phone_number": "+1234567890",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "New York, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "123456",
       "role": "patient"
   },
@@ -21,7 +21,7 @@
       "phone_number": "+1987654321",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Los Angeles, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "234567",
       "role": "patient"
   },
@@ -33,7 +33,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "Chicago, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "345678",
       "role": "patient"
   },
@@ -45,7 +45,7 @@
       "phone_number": "+9988776655",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Miami, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "456789",
       "role": "patient"
   },
@@ -57,7 +57,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "San Francisco, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "567890",
       "role": "patient"
   },
@@ -69,7 +69,7 @@
       "phone_number": "+9988776655",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Seattle, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "678901",
       "role": "patient"
   },
@@ -81,7 +81,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "Dallas, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "789012",
       "role": "patient"
   },
@@ -93,7 +93,7 @@
       "phone_number": "+9988776655",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Houston, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "890123",
       "role": "patient"
   },
@@ -105,7 +105,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "Atlanta, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "901234",
       "role": "patient"
   },
@@ -117,7 +117,7 @@
       "phone_number": "+9988776655",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Boston, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "012345",
       "role": "patient"
   },
@@ -129,7 +129,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "Phoenix, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "123456",
       "role": "patient"
   },
@@ -142,7 +142,7 @@
       "phone_number": "+9988776655",
       "Gender": "Male",
       "profile_picture": "./images/male.png",
-      "location": "Denver, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "234567",
       "role": "patient"
   },
@@ -154,7 +154,7 @@
       "phone_number": "+1122334455",
       "Gender": "Female",
       "profile_picture": "./images/female.png",
-      "location": "Philadelphia, USA",
+      "location":"{longitude:350.6001874506261,latitude:10.81381620633338,place:{city:Sousse,country:Tunisia,district:Sousse Riadh}}",
       "verification_code": "345678",
       "role": "patient"
   }
