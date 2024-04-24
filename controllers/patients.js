@@ -128,9 +128,7 @@ const getNear = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-const sendReq = async (req, res) => {};
+}
 const search = async (req, res) => {
   try {
     const { specialty } = req.params;
@@ -201,13 +199,30 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const getMedicalInfo = async (req, res) => {
+  try {
+    let { id } = req.params
+    const medicalInfo = await prisma.medicalInfo.findUnique({
+      where: {
+        patientId: parseInt(id)
+      }
+    })
+    res.status(201).send(medicalInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+
+}
+
+
 module.exports = {
   signup,
   signin,
   getAllDoctors,
   getOneDoctor,
-  sendReq,
   search,
   getNear,
   updateProfile,
+  getMedicalInfo,
 };
