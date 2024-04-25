@@ -187,7 +187,7 @@ const getOne = async (req, res) => {
       include: { medicalInfo: true },
     });
   
-    res.status(200).send(patientWithMedicalInfo)
+    res.status(200).json(patientWithMedicalInfo)
   } catch (error) {
   
     console.error( error);

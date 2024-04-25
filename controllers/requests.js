@@ -88,7 +88,7 @@ const getRequests = async (req, res) => {
   try {
     const decodedToken = jwt.decode(req.params.token);
     const doctorId = decodedToken.userId;
-    const pendingRequests = await prisma.request.findMany({
+    const Requests = await prisma.request.findMany({
       include: {
         Patient: {
           select: {
@@ -98,7 +98,7 @@ const getRequests = async (req, res) => {
         },
       },
     });
-    const reversed = pendingRequests.reverse();
+    const reversed = Requests.reverse();
     res.status(200).json({ reversed, doctorId });
   } catch (error) {
     console.error("Error fetching pending requests:", error);
