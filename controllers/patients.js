@@ -7,7 +7,6 @@ const {
 } = require("../helper/helperFunction.js");
 
 const signup = async (req, res) => {
-  console.log(req.body);
   try {
     let { password, date_of_birth } = req.body;
     date_of_birth = new Date(date_of_birth);
@@ -17,7 +16,6 @@ const signup = async (req, res) => {
     newPatient.password = bcrypt.hashSync(password, 8);
     newPatient.role = "patient";
     newPatient.location = JSON.stringify(newPatient.location);
-    let result = await prisma.patient.create({ data: newPatient });
     if (newPatient.Gender === "female") {
       newPatient.profile_picture =
         "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-s3t28RdEh3CJTtyc5ixDrT1oRDoHGPENQQrhnz1kev-OO4tq";
@@ -25,6 +23,8 @@ const signup = async (req, res) => {
       newPatient.profile_picture =
         "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRdQFCKS5R8Bt__gS9jeUmL2caFy32kcxLkNNsQQXd1c6HV0lrv";
     }
+    let result = await prisma.patient.create({ data: newPatient });
+   
     res.status(201).send("Patient  Registred ");
   } catch (error) {
     console.log(error);
@@ -134,45 +134,45 @@ const getNear = async (req, res) => {
     console.log(error);
   }
 
-  
+
 };
 
 const sendReq = async (req, res) => {
-  try{
- const newrequest = {
-  message : req.body.message ,
-  status : "pending" ,
-  patientId : JSON.parse(req.params.id) , 
-  doctorId : null 
+  try {
+    const newrequest = {
+      message: req.body.message,
+      status: "pending",
+      patientId: JSON.parse(req.params.id),
+      doctorId: null
 
- }
-  const request = await prisma.request.create({
-    // let result = await prisma.patient.create({ data: newPatient });
-    
-    data: newrequest
-  })
-  res.status(201).json(request)
-}catch (error) {
-  console.log(error);
-  res.status(401).json(error)
-}
+    }
+    const request = await prisma.request.create({
+      // let result = await prisma.patient.create({ data: newPatient });
+
+      data: newrequest
+    })
+    res.status(201).json(request)
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error)
+  }
 };
 const search = async (req, res) => {
   try {
-    const { specialty } = req.params;
-    console.log(specialty);
+    const { speciality } = req.params;
+    console.log(speciality);
     const doctors = await prisma.doctor.findMany({
       where: {
         MedicalExp: {
-          speciality: { contains: specialty },
+          speciality: { contains: speciality },
         },
-      }, //include : {MedicalExp : true},
+      },
+      include: { MedicalExp: true },
     });
 
     if (!doctors || doctors.length === 0) {
       return res.status(404).json({ error: " not found" });
     }
-
     res.json(doctors);
   } catch (error) {
     console.error("Error fetching doctor:", error);
@@ -183,7 +183,8 @@ const search = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const { FullName, date_of_birth, email, password, phone_number, location } = req.body;
+    const { FullName, date_of_birth, email, password, phone_number, location } =
+      req.body;
 
     // Initialize an empty object to store the fields to update
     let dataToUpdate = {};
@@ -219,21 +220,36 @@ const updateProfile = async (req, res) => {
       data: dataToUpdate,
     });
 
-    res.status(201).send('Patient updated');
+    res.status(201).send("Patient updated");
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
   }
 };
 
+const getMedicalInfo = async (req, res) => {
+  try {
+    let { id } = req.params;
+    const medicalInfo = await prisma.medicalInfo.findUnique({
+      where: {
+        patientId: parseInt(id),
+      },
+    });
+    res.status(201).send(medicalInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+
+}
 
 module.exports = {
   signup,
   signin,
   getAllDoctors,
   getOneDoctor,
-  sendReq,
   search,
   getNear,
   updateProfile,
+  getMedicalInfo,
 };

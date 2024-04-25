@@ -135,52 +135,33 @@ const createMedExp = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
-const getRequests = async (req, res) => {
+const getPatientsToDoctor = async (req, res) => {
   try {
-    const { doctorId } = req.params;
-    // Fetch pending requests for the specified doctor
-    const pendingRequests = await prisma.request.findMany({
-      where: {
-        doctorId: parseInt(doctorId),
-        status: 'Pending'
-      }
-    });
-    res.status(200).json(pendingRequests);
-  } catch (error) {
-    console.error('Error fetching pending requests:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
 
-const handleReq = async (req, res) => {
-  try {
-    const { requestId } = req.params;
-    // Update the status of the request to 'Accepted'
-    const updatedRequest = await prisma.request.update({
+    const doctorId = parseInt(req.params.doctorId);  
+    if (!doctorId) {
+      return res.status(400).json({ message: 'Doctor ID must be provided' });
+    }
+
+    const doctor = await prisma.doctor.findUnique({
       where: {
-        id: parseInt(requestId)
+        id: doctorId
       },
-      data: {
-        status: 'Accepted'
+      include: {
+        patients: true,  
       }
     });
-    res.status(201).json(updatedRequest);
-  } catch (error) {
-    console.error('Error updating request status:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
 
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
 
-
-
-const sendReq = async (req, res) => {};
-
-const search = async (req, res) => {};
-
-const updatePatientMed = async (req, res) => {};
+    res.status(200).json(doctor.patients);}
+  catch (err) {
+        console.log(err);
+        res.status(404).json({ error: " not found." });
+      }
+    }
 
 const getAllPatient = async (req, res) => {
   try {
@@ -193,14 +174,30 @@ const getAllPatient = async (req, res) => {
   }
 };
 
+const getOne = async (req, res) => {
+
+  let{patientId}=req.params
+  
+  try {
+  
+    const patientWithMedicalInfo = await prisma.patient.findUnique({
+      where: { id: parseInt(patientId) },
+      include: { medicalInfo: true },
+    });
+  
+    res.status(200).send(patientWithMedicalInfo)
+  } catch (error) {
+  
+    console.error( error);
+    res.status(404).send(error)
+ 
+  } 
+};
 module.exports = {
   signup,
-  getOne,
   signin,
   getAllPatient,
-  updatePatientMed,
-  search,
-  handleReq,
+  getPatientsToDoctor,
   createMedExp,
-  getRequests,
+  getOne
 };
