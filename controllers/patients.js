@@ -123,7 +123,12 @@ const getNear = async (req, res) => {
       10.6001874506261,
       (count = 3)
     );
+    for (let index = 0; index < docNear.length; index++) {
+      docNear[index].location=JSON.parse(docNear[index].location);
+      
+    }
     console.log(docNear);
+
     res.send(docNear);
   } catch (error) {
     console.log(error);
