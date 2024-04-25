@@ -137,8 +137,10 @@ const createMedExp = async (req, res) => {
 };
 const getPatientsToDoctor = async (req, res) => {
   try {
-
-    const doctorId = parseInt(req.params.doctorId);  
+console.log(req.params)
+    const decodedToken = jwt.decode(req.params.doctorId);
+    const doctorId = decodedToken.userId;
+      
     if (!doctorId) {
       return res.status(400).json({ message: 'Doctor ID must be provided' });
     }

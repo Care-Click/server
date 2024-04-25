@@ -173,7 +173,10 @@ const search = async (req, res) => {
     if (!doctors || doctors.length === 0) {
       return res.status(404).json({ error: " not found" });
     }
-    res.json(doctors);
+  for (let i = 0; i < doctors.length; i++) {
+    doctors[i].location= JSON.parse(doctors[i].location)
+  }
+    res.status(201).json(doctors);
   } catch (error) {
     console.error("Error fetching doctor:", error);
     res.status(500).json({ error: "Internal server error" });
