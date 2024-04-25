@@ -127,6 +127,7 @@ const sendReq = async (req, res) => {
 };
 
 const automateFill = async (req, res) => {
+
   const { patientId } = req.params;
   try {
     const patientMedicalInfo = await prisma.medicalInfo.findUnique({
@@ -134,9 +135,8 @@ const automateFill = async (req, res) => {
     });
 
     let newMedInfo = {};
-
+console.log(patientMedicalInfo);
     for (let key in req.body) {
-      console.log(patientMedicalInfo[key]);
 
       if (Array.isArray(patientMedicalInfo[key])) {
 
@@ -160,6 +160,7 @@ const automateFill = async (req, res) => {
     res.status(401).json(error);
   }
 };
+/////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   getRequests,
   sendReq,
