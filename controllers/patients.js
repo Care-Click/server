@@ -24,7 +24,7 @@ const signup = async (req, res) => {
         "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRdQFCKS5R8Bt__gS9jeUmL2caFy32kcxLkNNsQQXd1c6HV0lrv";
     }
     let result = await prisma.patient.create({ data: newPatient });
-   
+
     res.status(201).send("Patient  Registred ");
   } catch (error) {
     console.log(error);
@@ -124,8 +124,7 @@ const getNear = async (req, res) => {
       (count = 3)
     );
     for (let index = 0; index < docNear.length; index++) {
-      docNear[index].location=JSON.parse(docNear[index].location);
-      
+      docNear[index].location = JSON.parse(docNear[index].location);
     }
     console.log(docNear);
 
@@ -133,8 +132,6 @@ const getNear = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-
-
 };
 
 const sendReq = async (req, res) => {
@@ -143,18 +140,17 @@ const sendReq = async (req, res) => {
       message: req.body.message,
       status: "pending",
       patientId: JSON.parse(req.params.id),
-      doctorId: null
-
-    }
+      doctorId: null,
+    };
     const request = await prisma.request.create({
       // let result = await prisma.patient.create({ data: newPatient });
 
-      data: newrequest
-    })
-    res.status(201).json(request)
+      data: newrequest,
+    });
+    res.status(201).json(request);
   } catch (error) {
     console.log(error);
-    res.status(401).json(error)
+    res.status(401).json(error);
   }
 };
 const search = async (req, res) => {
@@ -173,9 +169,9 @@ const search = async (req, res) => {
     if (!doctors || doctors.length === 0) {
       return res.status(404).json({ error: " not found" });
     }
-  for (let i = 0; i < doctors.length; i++) {
-    doctors[i].location= JSON.parse(doctors[i].location)
-  }
+    for (let i = 0; i < doctors.length; i++) {
+      doctors[i].location = JSON.parse(doctors[i].location);
+    }
     res.status(201).json(doctors);
   } catch (error) {
     console.error("Error fetching doctor:", error);
@@ -243,56 +239,65 @@ const getMedicalInfo = async (req, res) => {
     console.log(error);
     res.status(500).json(error);
   }
-
-}
-
+};
 
 const getPatientDoctors = async (req, res) => {
   try {
-    const patientId = parseInt(req.params.patientId);  
-  
-    const Patient = await prisma.patient.findUnique({
+    const patientId = parseInt(req.params.patientId);
 
+    const Patient = await prisma.patient.findUnique({
       where: {
-        id: patientId
+        id: patientId,
       },
 
       include: {
-        doctors: true,  
-      }
-
-    });
-
-   console.log(Patient);
-
-    res.status(200).json(Patient.doctors)
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-
-}
-
-const getPatientRequests = async (req, res) => {
-  try {
-    const patientId = parseInt(req.params.patientId);  
-  
-    const requests = await prisma.request.findMany({
-
-      where: {
-        patientId: patientId
+        doctors: true,
       },
     });
 
-   console.log(requests);
+    console.log(Patient);
 
-    res.status(200).json(requests)
+    res.status(200).json(Patient.doctors);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
   }
+};
 
-}
+const getPatientRequests = async (req, res) => {
+  try {
+    const patientId = parseInt(req.params.patientId);
+
+    const requests = await prisma.request.findMany({
+      where: {
+        patientId: patientId,
+      },
+      include: {
+        Doctor: {
+          select: {
+            id: true,
+            FullName: true,
+            location: true,
+          },
+        },
+      },
+    });
+
+    for (let index = 0; index < requests.length; index++) {
+      const element = requests[index];
+      if (element.Doctor) {
+        element.Doctor.location = JSON.parse(element.Doctor.location);
+      }
+    }
+
+    console.log(requests);
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
 module.exports = {
   signup,
   signin,
@@ -303,5 +308,5 @@ module.exports = {
   updateProfile,
   getMedicalInfo,
   getPatientDoctors,
-  getPatientRequests
+  getPatientRequests,
 };
