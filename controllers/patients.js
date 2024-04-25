@@ -282,7 +282,7 @@ const getPatientRequests = async (req, res) => {
         },
       },
     });
-
+    console.log("😂😂",requests);
     for (let index = 0; index < requests.length; index++) {
       const element = requests[index];
       if (element.Doctor) {
@@ -290,7 +290,7 @@ const getPatientRequests = async (req, res) => {
       }
     }
 
-    console.log(requests);
+    console.log("❌❌❌",requests);
 
     res.status(200).json(requests);
   } catch (error) {
