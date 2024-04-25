@@ -243,6 +243,53 @@ const getMedicalInfo = async (req, res) => {
 
 }
 
+
+const getPatientDoctors = async (req, res) => {
+  try {
+    const patientId = parseInt(req.params.patientId);  
+  
+    const Patient = await prisma.patient.findUnique({
+
+      where: {
+        id: patientId
+      },
+
+      include: {
+        doctors: true,  
+      }
+
+    });
+
+   console.log(Patient);
+
+    res.status(200).json(Patient.doctors)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+
+}
+
+const getPatientRequests = async (req, res) => {
+  try {
+    const patientId = parseInt(req.params.patientId);  
+  
+    const requests = await prisma.request.findMany({
+
+      where: {
+        patientId: patientId
+      },
+    });
+
+   console.log(requests);
+
+    res.status(200).json(requests)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+
+}
 module.exports = {
   signup,
   signin,
@@ -252,4 +299,6 @@ module.exports = {
   getNear,
   updateProfile,
   getMedicalInfo,
+  getPatientDoctors,
+  getPatientRequests
 };

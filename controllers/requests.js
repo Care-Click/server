@@ -132,31 +132,27 @@ const automateFill = async (req, res) => {
     const patientMedicalInfo = await prisma.medicalInfo.findUnique({
       where: { id: parseInt(patientId) },
     });
-    console.log(patientMedicalInfo, patientId);
-
-    console.log(patientMedicalInfo);
 
     let newMedInfo = {};
 
     for (let key in req.body) {
-
       console.log(patientMedicalInfo[key]);
 
       if (Array.isArray(patientMedicalInfo[key])) {
 
         newMedInfo[key] = [...patientMedicalInfo[key], ...req.body[key]];
-
-      } else {
+      }
+       else {
         newMedInfo[key] = req.body[key];
       }
     }
+
 
     const updatedMedicalInfo = await prisma.medicalInfo.update(
       {
         where: { id: patientMedicalInfo.id },
         data: newMedInfo
       });
-    console.log(updatedMedicalInfo);
 
     res.status(201).json(updatedMedicalInfo);
   } catch (error) {

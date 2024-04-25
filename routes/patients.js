@@ -10,7 +10,9 @@ const {
   search,
   getNear,
   updateProfile,
-  getMedicalInfo
+  getMedicalInfo,
+  getPatientDoctors,
+  getPatientRequests
 } = require("../controllers/patients");
 
 router.post("/signup", signup);
@@ -28,5 +30,9 @@ router.get("/getMedicalInfo/:id",getMedicalInfo)
 router.get("/search/:speciality", search);
 
 router.post("/updateProfile/:id", updateProfile);
+
+router.get("/getPatientDoctors/:patientId", getPatientDoctors);
+
+router.get("/getPatientRequests/:patientId", getPatientRequests);
 
 module.exports = router;
