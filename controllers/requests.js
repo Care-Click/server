@@ -44,9 +44,41 @@ const accepteRequest = async (req, res) => {
         status: "Accepted",
       },
     });
-    console.log(result);
 
-    res.status(200).send({ result });
+    const doctor = await prisma.doctor.findUnique({
+      where: {
+        id: parseInt(doctorId)
+      },
+      include: {
+        patients: true
+      }
+    })
+
+    const patient = await prisma.patient.findUnique({
+      where: {
+        id: parseInt(result.patientId)
+      }
+    })
+
+    for (let index = 0; index < doctor.patients.length; index++) {
+      const element = doctor.patients[index];
+      if (element.id === patient.id) {
+        res.status(200).send('patient already exist');
+      }
+    }
+
+    const newPatients = [...doctor.patients, patient]
+    const docpat = await prisma.doctor.update({
+      where: {
+        id: parseInt(doctorId)
+      },
+      data: {
+        patients: {
+          set: newPatients
+        }
+      }
+    })
+    res.status(200).send({ docpat });
   } catch (error) {
     console.log(error);
     res.send(error);
@@ -100,10 +132,10 @@ const automateFill = async (req, res) => {
     const patientMedicalInfo = await prisma.medicalInfo.findUnique({
       where: { id: parseInt(patientId) },
     });
-    console.log(patientMedicalInfo,patientId);
+    console.log(patientMedicalInfo, patientId);
 
     console.log(patientMedicalInfo);
-    
+
     let newMedInfo = {};
 
     for (let key in req.body) {
@@ -120,9 +152,11 @@ const automateFill = async (req, res) => {
     }
 
     const updatedMedicalInfo = await prisma.medicalInfo.update(
-        {where :{id:patientMedicalInfo.id},
-            data:newMedInfo});
-console.log(updatedMedicalInfo);
+      {
+        where: { id: patientMedicalInfo.id },
+        data: newMedInfo
+      });
+    console.log(updatedMedicalInfo);
 
     res.status(201).json(updatedMedicalInfo);
   } catch (error) {
