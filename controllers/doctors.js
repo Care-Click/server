@@ -137,8 +137,7 @@ const createMedExp = async (req, res) => {
 
 const getDoctorPatients = async (req, res) => {
   try {
-    const { doctorId } = req;
-
+    const  doctorId = req.doctorId
     const doctor = await prisma.doctor.findUnique({
       where: {
         id: doctorId,
@@ -147,7 +146,6 @@ const getDoctorPatients = async (req, res) => {
         patients: true,
       },
     });
-
     res.status(200).json(doctor.patients);
   } catch (err) {
     res.status(404).send(" not found");
