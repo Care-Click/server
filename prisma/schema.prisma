@@ -8,13 +8,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// a doctor have a unique medicalexp and a medicalexp has only one patient
+// a patinet have a unique medicalinfo and a medicalinfo has only one patient
+// a patient can make many requests and a request correspond to one patient 
+// a doctor can acept many requests and request can only be acceptes by one doctor 
+// a report can belong to one one request and a  request can have only one report 
+// a doctor can belong to many reports but a report can belong to only one doctor
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Doctor {
-  id              Int         @id @default(autoincrement()) @unique
+  id              Int         @id @unique @default(autoincrement())
   FullName        String
   date_of_birth   DateTime
   email           String      @unique
@@ -26,14 +32,14 @@ model Doctor {
   verified        Boolean
   status          Boolean
   role            String
+  speciality      String
   patients        Patient[]   @relation("DoctorToPatient")
   doctorRequests  Request[]   @relation("DoctorRequests")
   MedicalExp      MedicalExp?
 }
 
 model MedicalExp {
-  id         Int     @id @default(autoincrement()) @unique
-  speciality String
+  id         Int     @id @unique @default(autoincrement())
   id_card    String
   bio        String
   doctor     Doctor? @relation(fields: [doctor_id], references: [id])
@@ -42,7 +48,7 @@ model MedicalExp {
 }
 
 model Request {
-  id        Int      @id @default(autoincrement()) @unique
+  id        Int      @id @unique @default(autoincrement())
   message   String
   status    String
   createdAt DateTime @default(now())
@@ -55,7 +61,7 @@ model Request {
 }
 
 model Report {
-  id                       Int      @id @default(autoincrement()) @unique
+  id                       Int      @id @unique @default(autoincrement())
   Familial_Medical_History String[]
   Allergies                String[]
   PastIllness              String[]
@@ -68,7 +74,7 @@ model Report {
 }
 
 model Patient {
-  id                Int          @id @default(autoincrement()) @unique
+  id                Int          @id @unique @default(autoincrement())
   FullName          String
   date_of_birth     DateTime
   email             String       @unique
@@ -83,8 +89,9 @@ model Patient {
   requests          Request[]
   medicalInfo       MedicalInfo?
 }
+
 model MedicalInfo {
-  id                       Int      @id @default(autoincrement()) @unique
+  id                       Int      @id @unique @default(autoincrement())
   Familial_Medical_History String[]
   Allergies                String[]
   PastIllness              String[]

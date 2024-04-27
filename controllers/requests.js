@@ -47,37 +47,39 @@ const accepteRequest = async (req, res) => {
 
     const doctor = await prisma.doctor.findUnique({
       where: {
-        id: parseInt(doctorId)
+        id: parseInt(doctorId),
       },
       include: {
-        patients: true
-      }
-    })
+        patients: true,
+      },
+    });
 
     const patient = await prisma.patient.findUnique({
       where: {
-        id: parseInt(result.patientId)
-      }
-    })
-
+        id: parseInt(result.patientId),
+      },
+    });
+    let test = true;
     for (let index = 0; index < doctor.patients.length; index++) {
       const element = doctor.patients[index];
       if (element.id === patient.id) {
-        res.status(200).send('patient already exist');
+        test = false;
+        break;
       }
     }
-
-    const newPatients = [...doctor.patients, patient]
-    const docpat = await prisma.doctor.update({
-      where: {
-        id: parseInt(doctorId)
-      },
-      data: {
-        patients: {
-          set: newPatients
-        }
-      }
-    })
+    if (test) {
+      const newPatients = [...doctor.patients, patient];
+      const docpat = await prisma.doctor.update({
+        where: {
+          id: parseInt(doctorId),
+        },
+        data: {
+          patients: {
+            set: newPatients,
+          },
+        },
+      });
+    }
     res.status(200).send({ docpat });
   } catch (error) {
     console.log(error);
@@ -94,12 +96,13 @@ const getRequests = async (req, res) => {
           select: {
             FullName: true,
             phone_number: true,
+            profile_picture: true,
           },
         },
       },
     });
     const reversed = Requests.reverse();
-    res.status(200).json({ reversed, doctorId });
+    res.status(200).send({ reversed, doctorId });
   } catch (error) {
     console.error("Error fetching pending requests:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -111,52 +114,57 @@ const sendReq = async (req, res) => {
     const newrequest = {
       message: req.body.message,
       status: "pending",
-      patientId: JSON.parse(req.params.id),
+      patientId:req.patientId,
       doctorId: null,
     };
+    if (req.params.doctorId) {
+      newrequest.doctorId = doctorId;
+    }
     const request = await prisma.request.create({
-      // let result = await prisma.patient.create({ data: newPatient });
-
       data: newrequest,
     });
+
     res.status(201).json(request);
+
   } catch (error) {
-    console.log(error);
+    
     res.status(401).json(error);
+  
   }
 };
 
 const automateFill = async (req, res) => {
 
   const { patientId } = req.params;
+
   try {
+    let newMedInfo = {};
+
     const patientMedicalInfo = await prisma.medicalInfo.findUnique({
       where: { id: parseInt(patientId) },
     });
 
-    let newMedInfo = {};
-console.log(patientMedicalInfo);
+
+    if (!patientMedicalInfo) {
+      createReport;
+    }
+
     for (let key in req.body) {
-
       if (Array.isArray(patientMedicalInfo[key])) {
-
         newMedInfo[key] = [...patientMedicalInfo[key], ...req.body[key]];
-      }
-       else {
+      } else {
         newMedInfo[key] = req.body[key];
       }
     }
 
-
-    const updatedMedicalInfo = await prisma.medicalInfo.update(
-      {
-        where: { id: patientMedicalInfo.id },
-        data: newMedInfo
-      });
-
+    const updatedMedicalInfo = await prisma.medicalInfo.update({
+      where: { id: patientId },
+      data: newMedInfo,
+    });
+    
     res.status(201).json(updatedMedicalInfo);
+
   } catch (error) {
-    console.log(error);
     res.status(401).json(error);
   }
 };

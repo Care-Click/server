@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const isDoctorAuthenticated=require('../middlewares/isDoctorAuthenticated.js')
 
-const { signup, signin, getAllPatient, createMedExp ,getPatientsToDoctor,getOne} = require('../controllers/doctors.js')
-
-
+const { signup, signin, createMedExp ,getDoctorPatients,getOnePatient} = require('../controllers/doctors.js')
 
 router.post("/signup", signup);
 
 router.post("/signin", signin);
 
-router.post("/createMedExp/:doctor_id", createMedExp)
+router.post("/createMedExp", isDoctorAuthenticated, createMedExp)
 
-router.get("/getAllPatient", getAllPatient)
+router.get("/patients", isDoctorAuthenticated, getDoctorPatients)
 
-router.get("/:doctorId/patients",getPatientsToDoctor )
-
-router.get("/patient/:patientId",getOne)
+router.get("/patient/:patientId", isDoctorAuthenticated, getOnePatient)
 
 module.exports = router    

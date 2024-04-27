@@ -1,82 +1,107 @@
 [
   {
-    "message": "Fever and sore throat",
+    "message": "Experiencing severe chest pain and difficulty breathing. Need immediate medical attention.",
     "status": "Pending",
-    "createdAt": "2022-04-25T10:00:00Z",
     "report_id": null,
     "doctorId": null,
     "patientId": 1
   },
   {
-    "message": "Back pain and difficulty walking",
-    "status": "Accepted",
-    "createdAt": "2022-04-26T11:30:00Z",
-    "report_id": 1,
+    "message": "Sudden loss of vision in left eye. Urgent evaluation required.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": null,
+    "patientId": 1
+  },
+  {
+    "message": "Sudden onset of high fever and chills. Urgent evaluation required.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": 1,
+    "patientId": 1
+  },
+  {
+    "message": "Experiencing severe abdominal pain and vomiting. Urgently need medical assessment.",
+    "status": "Pending",
+    "report_id": null,
     "doctorId": null,
     "patientId": 2
   },
   {
-    "message": "Chest pain and shortness of breath",
+    "message": "Sudden onset of shortness of breath and wheezing. Urgent evaluation required.",
     "status": "Pending",
-    "createdAt": "2022-04-27T14:45:00Z",
+    "report_id": null,
+    "doctorId": null,
+    "patientId": 2
+  },
+  {
+    "message": "Sudden loss of vision in left eye. Urgent evaluation required.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": 2,
+    "patientId": 2
+  },
+  {
+    "message": "Experiencing severe back pain and difficulty walking. Need immediate medical attention.",
+    "status": "Pending",
     "report_id": null,
     "doctorId": null,
     "patientId": 3
   },
   {
-    "message": "Abdominal pain and nausea",
-    "status": "Accepted",
-    "createdAt": "2022-04-28T16:20:00Z",
-    "report_id": 2,
+    "message": "Sudden onset of shortness of breath and wheezing. Urgent evaluation required.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": null,
+    "patientId": 3
+  },
+  {
+    "message": "Experiencing severe headache and dizziness. Urgent evaluation required.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": 3,
+    "patientId": 3
+  },
+  {
+    "message": "Experiencing severe toothache and swelling. Urgently need dental care.",
+    "status": "Pending",
+    "report_id": null,
     "doctorId": null,
     "patientId": 4
   },
   {
-    "message": "Headache and dizziness",
+    "message": "Sudden onset of eye pain and redness. Need urgent evaluation by an eye specialist.",
     "status": "Pending",
-    "createdAt": "2022-04-29T09:00:00Z",
+    "report_id": null,
+    "doctorId": null,
+    "patientId": 4
+  },
+  {
+    "message": "Experiencing severe chest pain and difficulty breathing. Need immediate medical attention.",
+    "status": "Pending",
+    "report_id": null,
+    "doctorId": 4,
+    "patientId": 4
+  },
+  {
+    "message": "Experiencing severe headache and dizziness. Urgent evaluation required.",
+    "status": "Pending",
     "report_id": null,
     "doctorId": null,
     "patientId": 5
   },
   {
-    "message": "Joint pain and stiffness",
-    "status": "Accepted",
-    "createdAt": "2022-04-30T13:10:00Z",
-    "report_id": 3,
-    "doctorId": null,
-    "patientId": 6
-  },
-  {
-    "message": "Numbness and tingling in extremities",
+    "message": "Sudden onset of shortness of breath and chest tightness. Need immediate medical attention.",
     "status": "Pending",
-    "createdAt": "2022-05-01T11:45:00Z",
     "report_id": null,
-    "doctorId": null,
-    "patientId": 7
+    "doctorId": 5,
+    "patientId": 5
   },
   {
-    "message": "Vision problems and eye pain",
-    "status": "Accepted",
-    "createdAt": "2022-05-02T15:30:00Z",
-    "report_id": 4,
-    "doctorId": null,
-    "patientId": 8
-  },
-  {
-    "message": "Difficulty sleeping and fatigue",
+    "message": "Experiencing severe back pain and difficulty walking. Need immediate medical attention.",
     "status": "Pending",
-    "createdAt": "2022-05-03T08:20:00Z",
     "report_id": null,
-    "doctorId": null,
-    "patientId": 9
-  },
-  {
-    "message": "Skin rash and itching",
-    "status": "Accepted",
-    "createdAt": "2022-05-04T10:50:00Z",
-    "report_id": 5,
-    "doctorId": null,
-    "patientId": 10
+    "doctorId": 5,
+    "patientId": 5
   }
 ]
