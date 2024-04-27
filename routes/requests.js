@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const isPatientAuthenticated=require("../middlewares/isPatientAuthenticated")
+const isDoctorAuthenticated=require('../middlewares/isDoctorAuthenticated.js')
 
 const {
   sendReq,
@@ -10,17 +12,14 @@ const {
 } = require("../controllers/requests");
 
 
-router.post("/createRepport/:request", createReport);
+router.post("/createRepport/:request", isDoctorAuthenticated, createReport);
 
-router.get("/accepteRequest/:requestId/:token", accepteRequest);
+router.get("/accepteRequest/:requestId", isDoctorAuthenticated, accepteRequest);
 
-router.get("/requests/:token", getRequests);
+router.get("/requests", isDoctorAuthenticated, getRequests);
 
-router.post("/emergencyRequest/:id", sendReq);
+router.post("/emergencyRequest", isPatientAuthenticated, sendReq);
 
-router.post("/raport/:id/:token", createReport);
-
-
-router.post("/raport/:patientId", automateFill);
+router.post("/raport/:patientId", isDoctorAuthenticated, automateFill);
 
 module.exports = router;
