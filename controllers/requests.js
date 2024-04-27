@@ -35,12 +35,11 @@ const createReport = async (req, res) => {
 
 const accepteRequest = async (req, res) => {
   try {
-    const decodedToken = jwt.decode(req.params.token);
-    const doctorId = decodedToken.userId;
+    const doctorId = req.doctorId;
     const result = await prisma.request.update({
       where: { id: parseInt(req.params.requestId) },
       data: {
-        doctorId: parseInt(doctorId),
+        doctorId: doctorId,
         status: "Accepted",
       },
     });
@@ -88,8 +87,7 @@ const accepteRequest = async (req, res) => {
 };
 const getRequests = async (req, res) => {
   try {
-    const decodedToken = jwt.decode(req.params.token);
-    const doctorId = decodedToken.userId;
+   let doctorId=req.doctorId
     const Requests = await prisma.request.findMany({
       include: {
         Patient: {
@@ -104,6 +102,7 @@ const getRequests = async (req, res) => {
     const reversed = Requests.reverse();
     res.status(200).send({ reversed, doctorId });
   } catch (error) {
+
     console.error("Error fetching pending requests:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -144,11 +143,6 @@ const automateFill = async (req, res) => {
       where: { id: parseInt(patientId) },
     });
 
-
-    if (!patientMedicalInfo) {
-      createReport;
-    }
-
     for (let key in req.body) {
       if (Array.isArray(patientMedicalInfo[key])) {
         newMedInfo[key] = [...patientMedicalInfo[key], ...req.body[key]];
@@ -158,7 +152,7 @@ const automateFill = async (req, res) => {
     }
 
     const updatedMedicalInfo = await prisma.medicalInfo.update({
-      where: { id: patientId },
+      where: { id: parseInt(patientId)},
       data: newMedInfo,
     });
     

@@ -18,7 +18,7 @@ const isDoctorAuthenticated = (req, res, next) => {
 
       return res.status(401).send( "Unauthorized❌");
     }
-    req.doctorId = decoded.id;
+    req.doctorId = decoded.doctorId;
     next();
   });
 };

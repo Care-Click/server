@@ -139,7 +139,6 @@ const sendReq = async (req, res) => {
 const search = async (req, res) => {
   try {
     const { speciality } = req.params;
-    console.log(speciality);
     const doctors = await prisma.doctor.findMany({
       where: {
         MedicalExp: {
