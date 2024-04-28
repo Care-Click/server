@@ -1,42 +1,41 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const prisma = require("../db/prisma");
-const { PrismaClient } = require('@prisma/client');
 const { upload } = require("../helper/helperFunction.js");
 
 const signup = async (req, res) => {
+  
   let {
-    password,
-    date_of_birth,
     FullName,
     email,
-    phone_number,
+    password,
     gender,
     location,
+    phone_number,
+    date_of_birth,
   } = req.body;
   date_of_birth = new Date(date_of_birth);
   date_of_birth = date_of_birth.toISOString();
   try {
-    //checking if the email is already in use
+
     const checkemail = await prisma.doctor.findUnique({
-      where: { email: email },
+      where: { email: email }
     });
+
     if (checkemail) {
-      return res.status(400).json({ error: "existing account  " });
+      return res.status(400).json("account exist ");
     }
-    // Hashing the password
+    
     const hashedPassword = bcrypt.hashSync(password, 8);
-    // Check if req.files is defined and contains the file buffer
+    
     if (!req.files || !req.files[0].buffer) {
       return res
         .status(400)
-        .json({ error: "Image buffer is missing from request" });
+        .json( "Image buffer is missing from request" );
     }
 
-    // Assuming req.files contains the image buffer, adjust this accordingly based on your setup
     const imageBuffer = req.files[0].buffer;
 
-    // Uploading image to Cloudinary
     const imageUrl = await upload(imageBuffer);
 
     const newDoctor = {
@@ -47,13 +46,12 @@ const signup = async (req, res) => {
       phone_number,
       gender,
       location,
-      role: "doctor", // Assuming doctor signup
-      verified: true, // Verifie from the admin
+      role: "doctor", 
+      verified: true,
       status: true,
       profile_picture: imageUrl,
     };
 
-    // Save doctor data to the database
     let result = await prisma.doctor.create({ data: newDoctor });
 
     res.status(200).send(result);
@@ -64,36 +62,35 @@ const signup = async (req, res) => {
 };
 
 const signin = async (req, res) => {
+
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(404).json({ error: "Email or Password not found." });
+    return res.status(404).json("Email or Password should be provided");
   }
 
   try {
-    // Retrieve doctor from the database by email
+    
     const doctor = await prisma.doctor.findUnique({
       where: {
         email: email,
       },
     });
 
-    // Check if doctor exists
     if (!doctor) {
-      return res.status(404).json({ error: "User not found." });
+      return res.status(404).json("doctor not found");
     }
 
-    // Checking if the password is valid
-    const passwordMatch = await bcrypt.compare(password, doctor.password);
+    const cofirmPassword = await bcrypt.compare(password, doctor.password);
 
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Password is incorrect." });
+    if (!cofirmPassword) {
+      return res.status(401).json("Password is incorrect." );
     }
 
-    // Generate a JSON Web Token (JWT) for authentication
     const token = jwt.sign(
       {
-        userId: doctor.id,
+        doctorId: doctor.id,
+        role: doctor.role,
       },
       process.env.JWT_SECRET,
       {
@@ -108,98 +105,71 @@ const signin = async (req, res) => {
 
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
-    console.error("Sign in error:", error);
     res.status(500).send("Internal server error");
   }
 };
-
+// creating the doctor  medical experience
 const createMedExp = async (req, res) => {
-  let { speciality, bio, medical_id } = req.body;
-  var { doctor_id } = req.params;
-  doctor_id = JSON.parse(doctor_id);
+  let { bio, medical_id } = req.body;
+
+  const doctorId = req.doctorId;
+
   const card = req.files[0].buffer;
+
   const image = await upload(card);
+
   try {
     let medicalExp = await prisma.medicalExp.create({
       data: {
-        speciality,
         id_card: image,
         bio,
-        doctor_id,
+        doctor_id: doctorId,
         medical_id,
       },
     });
     res.status(201).send("Medical Experience Added Succesfully");
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };
-const getPatientsToDoctor = async (req, res) => {
-  try {
-console.log(req.params)
-    const decodedToken = jwt.decode(req.params.doctorId);
-    const doctorId = decodedToken.userId;
-      
-    if (!doctorId) {
-      return res.status(400).json({ message: 'Doctor ID must be provided' });
-    }
 
+// getting the  patiens that the  doctor had consulted
+
+const getDoctorPatients = async (req, res) => {
+  try {
+    const  doctorId = req.doctorId
     const doctor = await prisma.doctor.findUnique({
       where: {
-        id: doctorId
+        id: doctorId,
       },
       include: {
-        patients: true,  
-      }
+        patients: true,
+      },
     });
-
-    if (!doctor) {
-      return res.status(404).json({ message: 'Doctor not found' });
-    }
-
-    res.status(200).json(doctor.patients);}
-  catch (err) {
-        console.log(err);
-        res.status(404).json({ error: " not found." });
-      }
-    }
-
-const getAllPatient = async (req, res) => {
-  try {
-    let result = await prisma.patient.findMany();
-    console.log(result);
-    res.status(200).json(result);
+    res.status(200).json(doctor.patients);
   } catch (err) {
-    console.log(err);
-    res.status(404).json({ error: " not found." });
+    res.status(404).send(" not found");
   }
 };
+// getting the patient  medical and personel  detail for the doctor
+const getOnePatient = async (req, res) => {
+  let { patientId } = req.params;
 
-const getOne = async (req, res) => {
-
-  let{patientId}=req.params
-  
   try {
-  
     const patientWithMedicalInfo = await prisma.patient.findUnique({
       where: { id: parseInt(patientId) },
       include: { medicalInfo: true },
     });
-  
-    res.status(200).send(patientWithMedicalInfo)
+
+    res.status(200).json(patientWithMedicalInfo);
   } catch (error) {
-  
-    console.error( error);
-    res.status(404).send(error)
- 
-  } 
+    res.status(404).send(error);
+  }
 };
 module.exports = {
   signup,
   signin,
-  getAllPatient,
-  getPatientsToDoctor,
+  getDoctorPatients,
   createMedExp,
-  getOne
+  getOnePatient,
 };
