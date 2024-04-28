@@ -1,52 +1,43 @@
 const prisma = require("./prisma");
 const doctors = require("../data/doctors.json");
+const doctorsmedinfos = require("../data/doctorsmedinfo.json");
 const patients = require("../data/patiens.json");
 const patientsMedInfos = require("../data/patientsMedInfo.json");
-;
-
-const Requests = require("../data/requests.json");
-const Reports = require("../data/reports.json");
-const doctorsmedinfos = require("../data/doctorsmedinfo.json");
-
-
-async function seed() {
-    for (const doctor of doctors) {
-      await prisma.doctor.create({
-        data: doctor,
-      });
-    }
-
-    for (const patient of patients) {
-      await prisma.patient.create({
-        data: patient,
-      });
-    }
-    for (const patientsMedInfo of patientsMedInfos) {
-      await prisma.medicalInfo.create({
-        data: patientsMedInfo,
-      });
-    }
-    for (const medicalExp of doctorsmedinfos) {
-      await prisma.medicalExp.create({
-        data: medicalExp,
-      });
-    }
-  for (const Request of Requests) {
-    await prisma.request.create({
-      data: Request,
+const requests=require("../data/requests.json")
+const seed = async () => {
+  await prisma.doctor
+    .createMany({ data: doctors, skipDuplicates: true })
+    .then((response) => {
+      console.log("doctors seeded  ", response);
     });
-  }
-for (const Report of Reports) {
-    await prisma.report.create({
-      data: Report,
-    });
-  }
 
-  console.log("Seed completed successfully");
+  await prisma.patient
+    .createMany({ data: patients, skipDuplicates: true })
+    .then((response) => {
+      console.log("patients seeded  ", response);
+    });
+
+  await prisma.medicalExp
+    .createMany({ data: doctorsmedinfos, skipDuplicates: true })
+    .then((response) => {
+      console.log("doctorsmedinfos seeded  ", response);
+    });
+
+  await prisma.medicalInfo
+    .createMany({ data: patientsMedInfos, skipDuplicates: true })
+    .then((response) => {
+      console.log("patientsMedInfos seeded  ", response);
+    });
+
+    await prisma.request
+    .createMany({ data: requests, skipDuplicates: true })
+    .then((response) => {
+      console.log("patientsMedInfos seeded  ", response);
+    });
+
+  console.log("All data Seeded  successfully");
   await prisma.$disconnect();
-}
-
+};
 seed().catch((error) => {
   console.error("Error seeding database:", error);
-  process.exit(1);
 });

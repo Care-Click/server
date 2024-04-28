@@ -1,4 +1,4 @@
-const { log } = require("console");
+
 const cloudinary = require("../utils/cloudinary");
 const { Readable } = require("stream");
 
@@ -21,34 +21,21 @@ const upload = async (buffer) => {
     });
     return cloudinaryResult.secure_url;
 };
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; 
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) *
-        Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; 
-    return distance;
-  }
   
 
 
-  function findNearestUsers(doctors, yourLat, yourLon, count = 3) {
+  function findNearestDoctors(doctors, city, district, count = 3) {
     const sortedDoctors = [];
+
     for (const doctor of doctors) {
-        let location=JSON.parse(doctor.location)
-        console.log(location);
-        const distance = calculateDistance(location.latitude, location.longitude, yourLat, yourLon);
-        sortedDoctors.push({ ...doctor, distance });
+
+       doctor.location=JSON.parse(doctor.location);
+
+        if(doctor.location.place.city===city&&doctor.location.place.district===district) 
+       
+        sortedDoctors.push(doctor);
     }
-        sortedDoctors.sort((a, b) => a.distance - b.distance);
     return sortedDoctors.slice(0, count);
-
     }
   
 
@@ -58,5 +45,5 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   
   
 
-module.exports = { upload, rundomNumber,findNearestUsers };
+module.exports = { upload, rundomNumber,findNearestDoctors };
 
