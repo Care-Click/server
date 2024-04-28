@@ -4,7 +4,7 @@ const prisma = require("../db/prisma");
 const { upload } = require("../helper/helperFunction.js");
 
 const signup = async (req, res) => {
-  
+
   let {
     FullName,
     email,
@@ -13,6 +13,7 @@ const signup = async (req, res) => {
     location,
     phone_number,
     date_of_birth,
+    speciality
   } = req.body;
   date_of_birth = new Date(date_of_birth);
   date_of_birth = date_of_birth.toISOString();
@@ -25,13 +26,13 @@ const signup = async (req, res) => {
     if (checkemail) {
       return res.status(400).json("account exist ");
     }
-    
+
     const hashedPassword = bcrypt.hashSync(password, 8);
-    
+
     if (!req.files || !req.files[0].buffer) {
       return res
         .status(400)
-        .json( "Image buffer is missing from request" );
+        .json("Image buffer is missing from request");
     }
 
     const imageBuffer = req.files[0].buffer;
@@ -46,10 +47,11 @@ const signup = async (req, res) => {
       phone_number,
       gender,
       location,
-      role: "doctor", 
+      role: "doctor",
       verified: true,
       status: true,
       profile_picture: imageUrl,
+      speciality
     };
 
     let result = await prisma.doctor.create({ data: newDoctor });
@@ -63,20 +65,18 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
 
-  const { email, password } = req.body;
+  const { email, password ,patientId} = req.body;
 
   if (!email || !password) {
     return res.status(404).json("Email or Password should be provided");
   }
 
   try {
-    
     const doctor = await prisma.doctor.findUnique({
       where: {
         email: email,
       },
     });
-
     if (!doctor) {
       return res.status(404).json("doctor not found");
     }
@@ -84,7 +84,7 @@ const signin = async (req, res) => {
     const cofirmPassword = await bcrypt.compare(password, doctor.password);
 
     if (!cofirmPassword) {
-      return res.status(401).json("Password is incorrect." );
+      return res.status(401).json("Password is incorrect.");
     }
 
     const token = jwt.sign(
@@ -105,6 +105,7 @@ const signin = async (req, res) => {
 
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
+    console.log(error);
     res.status(500).send("Internal server error");
   }
 };
@@ -112,7 +113,8 @@ const signin = async (req, res) => {
 const createMedExp = async (req, res) => {
   let { bio, medical_id } = req.body;
 
-  const doctorId = req.doctorId;
+  const {doctorId} = req.params;
+  const parsedId= JSON.parse(doctorId)
 
   const card = req.files[0].buffer;
 
@@ -123,12 +125,13 @@ const createMedExp = async (req, res) => {
       data: {
         id_card: image,
         bio,
-        doctor_id: doctorId,
+        doctor_id: parsedId,
         medical_id,
       },
     });
-    res.status(201).send("Medical Experience Added Succesfully");
+    res.status(201).send(medicalExp);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -137,7 +140,7 @@ const createMedExp = async (req, res) => {
 
 const getDoctorPatients = async (req, res) => {
   try {
-    const  doctorId = req.doctorId
+    const doctorId = req.doctorId
     const doctor = await prisma.doctor.findUnique({
       where: {
         id: doctorId,

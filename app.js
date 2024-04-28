@@ -10,7 +10,7 @@ const requestRouter = require("./routes/requests");
 const app = express();
 const upload = multer();
 
-const port = 3001;
+const port = 3000;
 
 app.use(upload.any());
 app.use(express.json());
