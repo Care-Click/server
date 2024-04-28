@@ -8,7 +8,7 @@ router.post("/signup", signup);
 
 router.post("/signin", signin);
 
-router.post("/createMedExp", isDoctorAuthenticated, createMedExp)
+router.post("/createMedExp/:doctorId", createMedExp)
 
 router.get("/patients", isDoctorAuthenticated, getDoctorPatients)
 
