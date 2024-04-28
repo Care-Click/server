@@ -36,6 +36,7 @@ model Doctor {
   patients        Patient[]   @relation("DoctorToPatient")
   doctorRequests  Request[]   @relation("DoctorRequests")
   MedicalExp      MedicalExp?
+   messages  Message[]  @relation("MessagesFromDoctor") 
 }
 
 model MedicalExp {
@@ -58,6 +59,7 @@ model Request {
   doctorId  Int?
   Patient   Patient? @relation(fields: [patientId], references: [id])
   patientId Int?
+  
 }
 
 model Report {
@@ -88,6 +90,7 @@ model Patient {
   doctors           Doctor[]     @relation("DoctorToPatient")
   requests          Request[]
   medicalInfo       MedicalInfo?
+  messages  Message[]  @relation("MessagesFromPatient")
 }
 
 model MedicalInfo {
@@ -101,4 +104,16 @@ model MedicalInfo {
   Imaging_test_results     String[]
   patient                  Patient? @relation(fields: [patientId], references: [id])
   patientId                Int?     @unique
+}
+
+
+model Message {
+  id            Int       @id @default(autoincrement())
+  content       String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  fromPatientId Int?
+  patient       Patient?  @relation("MessagesFromPatient", fields: [fromPatientId], references: [id])
+  fromDoctorId  Int?
+  doctor        Doctor?   @relation("MessagesFromDoctor", fields: [fromDoctorId], references: [id])
 }
