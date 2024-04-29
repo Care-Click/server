@@ -86,8 +86,9 @@ const accepteRequest = async (req, res) => {
   }
 };
 const getRequests = async (req, res) => {
+
   try {
-   let doctorId=req.doctorId
+    let doctorId = req.doctorId
     const Requests = await prisma.request.findMany({
       include: {
         Patient: {
@@ -113,7 +114,7 @@ const sendReq = async (req, res) => {
     const newrequest = {
       message: req.body.message,
       status: "pending",
-      patientId:req.patientId,
+      patientId: req.patientId,
       doctorId: null,
     };
     if (req.params.doctorId) {
@@ -126,42 +127,53 @@ const sendReq = async (req, res) => {
     res.status(201).json(request);
 
   } catch (error) {
-    
+
     res.status(401).json(error);
-  
+
   }
 };
 
 const automateFill = async (req, res) => {
 
   const { patientId } = req.params;
-
+  let  newreport = req.body.newreport;
+  console.log("bod",req.body);
   try {
     let newMedInfo = {};
 
     const patientMedicalInfo = await prisma.medicalInfo.findUnique({
-      where: { id: parseInt(patientId) },
+      where: { patientId: parseInt(patientId) },
     });
-
-    for (let key in req.body) {
-      if (Array.isArray(patientMedicalInfo[key])) {
-        newMedInfo[key] = [...patientMedicalInfo[key], ...req.body[key]];
-      } else {
-        newMedInfo[key] = req.body[key];
+    if (!patientMedicalInfo) {
+      newreport.patientId = parseInt(patientId)
+      console.log(newreport);
+      patientMedicalInfo = await prisma.medicalInfo.create(
+        {
+          data:newreport
+        }
+      );
+    } else {
+      for (let key in newreport) {  
+          newMedInfo[key] = [...patientMedicalInfo[key], ...newreport[key]];
       }
+      const updatedMedicalInfo = await prisma.medicalInfo.update({
+        where: { patientId: parseInt(patientId) },
+        data: newMedInfo,
+      });
+      res.status(201).json(updatedMedicalInfo);
+
     }
 
-    const updatedMedicalInfo = await prisma.medicalInfo.update({
-      where: { id: parseInt(patientId)},
-      data: newMedInfo,
-    });
-    
-    res.status(201).json(updatedMedicalInfo);
+
+
+
 
   } catch (error) {
+    console.log(error);
     res.status(401).json(error);
   }
 };
+
 /////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   getRequests,
