@@ -12,7 +12,7 @@ const {
 } = require("../controllers/requests");
 
 
-router.post("/createRepport/:request", isDoctorAuthenticated, createReport);
+router.post("/createRepport/:request",  createReport);
 
 router.get("/accepteRequest/:requestId", isDoctorAuthenticated, accepteRequest);
 
@@ -20,6 +20,6 @@ router.get("/requests", isDoctorAuthenticated, getRequests);
 
 router.post("/emergencyRequest", isPatientAuthenticated, sendReq);
 
-router.post("/raport/:patientId", isDoctorAuthenticated, automateFill);
+router.post("/raport/:patientId",  automateFill);
 
 module.exports = router;
