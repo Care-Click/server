@@ -18,7 +18,7 @@ router.get("/accepteRequest/:requestId", isDoctorAuthenticated, accepteRequest);
 
 router.get("/requests", isDoctorAuthenticated, getRequests);
 
-router.post("/emergencyRequest", isPatientAuthenticated, sendReq);
+router.post("/emergencyRequest/:patientId",sendReq);
 
 router.post("/raport/:patientId",  automateFill);
 

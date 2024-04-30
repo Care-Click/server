@@ -12,6 +12,6 @@ router.post("/createMedExp/:doctorId", createMedExp)
 
 router.get("/patients", isDoctorAuthenticated, getDoctorPatients)
 
-router.get("/patient/:patientId", isDoctorAuthenticated, getOnePatient)
+router.get("/patient/:patientId", getOnePatient)
 
 module.exports = router    

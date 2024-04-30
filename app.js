@@ -7,6 +7,7 @@ const patientRouter = require("./routes/patients");
 const doctorRouter = require("./routes/doctors");
 const requestRouter = require("./routes/requests");
 const messageRouter = require ("./routes/messages");
+const adminRouter  = require("./routes/admin")
 
 const app = express();
 const upload = multer();
@@ -23,6 +24,7 @@ app.use("/api/patients", patientRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/requests", requestRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/admin",adminRouter)
 
 app.listen(3000, () => {
   console.log(`app listening on port ${port}`);
