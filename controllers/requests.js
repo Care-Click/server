@@ -114,7 +114,7 @@ const sendReq = async (req, res) => {
     const newrequest = {
       message: req.body.message,
       status: "pending",
-      patientId: req.patientId,
+      patientId: JSON.parse(req.params.patientId),
       doctorId: null,
     };
     if (req.params.doctorId) {
@@ -127,7 +127,7 @@ const sendReq = async (req, res) => {
     res.status(201).json(request);
 
   } catch (error) {
-
+console.log(error);
     res.status(401).json(error);
 
   }
@@ -136,8 +136,7 @@ const sendReq = async (req, res) => {
 const automateFill = async (req, res) => {
 
   const { patientId } = req.params;
-  let  newreport = req.body.newreport;
-  console.log("bod",req.body);
+  let  newreport = req.body;
   try {
     let newMedInfo = {};
 
@@ -146,7 +145,7 @@ const automateFill = async (req, res) => {
     });
     if (!patientMedicalInfo) {
       newreport.patientId = parseInt(patientId)
-      console.log(newreport);
+      
       patientMedicalInfo = await prisma.medicalInfo.create(
         {
           data:newreport
@@ -156,6 +155,7 @@ const automateFill = async (req, res) => {
       for (let key in newreport) {  
           newMedInfo[key] = [...patientMedicalInfo[key], ...newreport[key]];
       }
+      
       const updatedMedicalInfo = await prisma.medicalInfo.update({
         where: { patientId: parseInt(patientId) },
         data: newMedInfo,
