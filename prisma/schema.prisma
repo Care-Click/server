@@ -116,4 +116,6 @@ model Message {
   patient       Patient?  @relation("MessagesFromPatient", fields: [fromPatientId], references: [id])
   fromDoctorId  Int?
   doctor        Doctor?   @relation("MessagesFromDoctor", fields: [fromDoctorId], references: [id])
+  toPatientId   Int?
+  toDoctorId    Int?
 }
