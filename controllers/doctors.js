@@ -215,10 +215,14 @@ const updateDoctors =async (req,res)=>{
       dataToUpdate.location = location;
 
     // Check if an image file is provided in the request
+    
       const {imageUrl} = req.body;
       // Uploading image to Cloudinary
-      const image = await upload(imageUrl);
-      if (image) dataToUpdate.profile_picture = image;
+      if (imageUrl) {
+        
+        const image = await upload(imageUrl);
+        dataToUpdate.profile_picture = image;
+      }
     
     // Update the patient with the specified fields
     const updateDoctor = await prisma.doctor.update({
