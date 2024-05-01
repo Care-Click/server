@@ -110,11 +110,12 @@ const getRequests = async (req, res) => {
 };
 
 const sendReq = async (req, res) => {
+  const patientId=req.patientId
   try {
     const newrequest = {
       message: req.body.message,
-      status: "pending",
-      patientId: JSON.parse(req.params.patientId),
+      status: "Pending",
+      patientId: patientId,
       doctorId: null,
     };
     if (req.params.doctorId) {
@@ -123,6 +124,7 @@ const sendReq = async (req, res) => {
     const request = await prisma.request.create({
       data: newrequest,
     });
+    console.log(request);
 
     res.status(201).json(request);
 

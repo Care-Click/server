@@ -1,29 +1,22 @@
 const jwt = require("jsonwebtoken");
 
-const isPatientAuthenticated = (req, res, next) => {
-  if (!req || !req.headers) {
-    return res.status(400).json({ error: 'Invalid request' });
-}
-  const token = req.headers["token"];
-  
-  if (!token) {
-  
-    return res.status(403).send("provid a token❌");
+const isPatientAuthenticated = async (req, res, next) => {
+  try {
 
-  }
+    const authHeader = req.headers.authorization;
 
-  jwt.verify(token,process.env.JWT_SECRET, (err, decoded) => {
-
-    if ((err) ||(decoded.role!=="patient")) {
-
-      return res.status(401).send( "Unauthorized❌");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "invalid Authorization header." });
     }
-
-    req.patientId = decoded.patientId;
-
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
+      req.patientId = decoded.patientId;
+    });
     next();
-
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ error: "failed." });
+  }
 };
 
 module.exports = isPatientAuthenticated;

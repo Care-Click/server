@@ -17,18 +17,18 @@ router.post("/signup", signup);
 
 router.post("/signin", signin);
 
-router.get("/getNearByDoctors/:city/:district", getNear);
+router.get("/getNearByDoctors",isPatientAuthenticated, getNear);
 
-router.get("/getOneDoctor/:id",  getOneDoctor);
+router.get("/getOneDoctor/:doctorId",isPatientAuthenticated,getOneDoctor);
 
-router.get("/getMedicalInfo/:id", getMedicalInfo) 
+router.get("/getMedicalInfo",isPatientAuthenticated, getMedicalInfo) 
 
-router.get("/search/:speciality",search);
+router.get("/search/:speciality",isPatientAuthenticated,search);
 
-router.put("/updateProfile/:patientId",updateProfile);
+router.put("/updateProfile",isPatientAuthenticated,updateProfile);
 
-router.get("/getPatientDoctors",getPatientDoctors);
+router.get("/getPatientDoctors",isPatientAuthenticated,getPatientDoctors);
 
-router.get("/getPatientRequests/:patientId",getPatientRequests);
+router.get("/getPatientRequests",isPatientAuthenticated,getPatientRequests);
 
 module.exports = router;
