@@ -169,10 +169,31 @@ const getOnePatient = async (req, res) => {
     res.status(404).send(error);
   }
 };
+
+const getDoctor=  async(req,res)=>{
+  const doctorId=req.doctorId
+  try {
+    const doctor = await prisma.doctor.findUnique({
+      where:{
+        id :doctorId
+      },
+      include:{
+        MedicalExp:true
+      }
+    })
+    res.status(201).json(doctor)
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error)
+  }
+}
+
+
 module.exports = {
   signup,
   signin,
   getDoctorPatients,
   createMedExp,
   getOnePatient,
+  getDoctor,
 };
