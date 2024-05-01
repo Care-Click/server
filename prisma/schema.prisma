@@ -20,10 +20,10 @@ datasource db {
 }
 
 model Doctor {
-  id              Int         @id @unique @default(autoincrement())
+  id              Int           @id @unique @default(autoincrement())
   FullName        String
   date_of_birth   DateTime
-  email           String      @unique
+  email           String        @unique
   password        String
   phone_number    String
   gender          String
@@ -33,10 +33,11 @@ model Doctor {
   status          Boolean
   role            String
   speciality      String
-  patients        Patient[]   @relation("DoctorToPatient")
-  doctorRequests  Request[]   @relation("DoctorRequests")
+  patients        Patient[]     @relation("DoctorToPatient")
+  doctorRequests  Request[]     @relation("DoctorRequests")
   MedicalExp      MedicalExp?
-   messages  Message[]  @relation("MessagesFromDoctor") 
+  appointments    Appointment[] @relation("DoctorAppointments")
+  messages        Message[]     @relation("MessagesFromDoctor")
 }
 
 model MedicalExp {
@@ -59,7 +60,6 @@ model Request {
   doctorId  Int?
   Patient   Patient? @relation(fields: [patientId], references: [id])
   patientId Int?
-  
 }
 
 model Report {
@@ -90,7 +90,7 @@ model Patient {
   doctors           Doctor[]     @relation("DoctorToPatient")
   requests          Request[]
   medicalInfo       MedicalInfo?
-  messages  Message[]  @relation("MessagesFromPatient")
+  messages          Message[]    @relation("MessagesFromPatient")
 }
 
 model MedicalInfo {
@@ -106,16 +106,27 @@ model MedicalInfo {
   patientId                Int?     @unique
 }
 
-
 model Message {
-  id            Int       @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   content       String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   fromPatientId Int?
-  patient       Patient?  @relation("MessagesFromPatient", fields: [fromPatientId], references: [id])
+  patient       Patient? @relation("MessagesFromPatient", fields: [fromPatientId], references: [id])
   fromDoctorId  Int?
-  doctor        Doctor?   @relation("MessagesFromDoctor", fields: [fromDoctorId], references: [id])
+  doctor        Doctor?  @relation("MessagesFromDoctor", fields: [fromDoctorId], references: [id])
   toPatientId   Int?
   toDoctorId    Int?
+}
+
+model Appointment {
+  id          Int      @id @unique @default(autoincrement())
+  dateTime    DateTime
+  PatientName String
+  description String
+  createdAt   DateTime @default(now())
+  doctor      Doctor   @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  doctorId    Int
+  
+  @@unique([dateTime, doctorId])
 }
