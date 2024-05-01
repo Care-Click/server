@@ -169,10 +169,80 @@ const getOnePatient = async (req, res) => {
     res.status(404).send(error);
   }
 };
+
+const getDoctor=  async(req,res)=>{
+  const doctorId=req.doctorId
+  try {
+    const doctor = await prisma.doctor.findUnique({
+      where:{
+        id :doctorId
+      },
+      include:{
+        MedicalExp:true
+      }
+    })
+    res.status(201).json(doctor)
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error)
+  }
+}
+
+const updateDoctors =async (req,res)=>{
+  const doctorId=req.doctorId
+  try {
+    const { FullName, date_of_birth, email, password, phone_number, location } =
+      req.body;
+    // Initialize an empty object to store the fields to update
+    let dataToUpdate = {};
+
+    // Check each field and add it to the dataToUpdate object if it's provided in the request body
+    if (FullName) dataToUpdate.FullName = FullName;
+    if (date_of_birth) {
+      // Convert and format date_of_birth if provided
+      const formattedDateOfBirth = new Date(date_of_birth).toISOString();
+      dataToUpdate.date_of_birth = formattedDateOfBirth;
+    }
+    if (email) dataToUpdate.email = email;
+    if (password) {
+      // Hash the password if provided
+      dataToUpdate.password = bcrypt.hashSync(password, 8);
+
+    }
+    if (phone_number)
+      dataToUpdate.phone_number = phone_number;
+    if (location)
+      dataToUpdate.location = location;
+
+    // Check if an image file is provided in the request
+    
+      const {imageUrl} = req.body;
+      // Uploading image to Cloudinary
+      if (imageUrl) {
+        
+        const image = await upload(imageUrl);
+        dataToUpdate.profile_picture = image;
+      }
+    
+    // Update the patient with the specified fields
+    const updateDoctor = await prisma.doctor.update({
+      where: { id: doctorId },
+      data: dataToUpdate,
+    });
+    res.status(201).json("Doctor updated");
+
+  } catch (error) {
+console.log(error);
+    res.status(500).json(error);
+  }
+}
+
 module.exports = {
   signup,
   signin,
   getDoctorPatients,
   createMedExp,
   getOnePatient,
+  getDoctor,
+  updateDoctors
 };
