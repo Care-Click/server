@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const isDoctorAuthenticated=require('../middlewares/isDoctorAuthenticated.js')
 
-const { signup, signin, createMedExp ,getDoctorPatients,getOnePatient,getDoctor} = require('../controllers/doctors.js')
+const { signup, signin, createMedExp ,getDoctorPatients,getOnePatient,getDoctor,updateDoctors} = require('../controllers/doctors.js')
 
 router.post("/signup", signup);
 
@@ -15,6 +15,8 @@ router.post("/createMedExp/:doctorId", createMedExp)
 router.get("/patients", isDoctorAuthenticated, getDoctorPatients)
 
 router.get("/patient/:patientId", getOnePatient)
+
+router.put("/updateProfile",isDoctorAuthenticated,updateDoctors)
 
 
 module.exports = router    
