@@ -1,15 +1,16 @@
 const prisma = require("./prisma");
-const doctors = require("../data/doctors.json");
+// const doctors = require("../data/doctors.json");
 const doctorsmedinfos = require("../data/doctorsmedinfo.json");
 const patients = require("../data/patiens.json");
 const patientsMedInfos = require("../data/patientsMedInfo.json");
 const requests=require("../data/requests.json")
+const appoitments=require("../data/appoitment.json")
 const seed = async () => {
-  await prisma.doctor
-    .createMany({ data: doctors, skipDuplicates: true })
-    .then((response) => {
-      console.log("doctors seeded  ", response);
-    });
+  // await prisma.doctor
+  //   .createMany({ data: doctors, skipDuplicates: true })
+  //   .then((response) => {
+  //     console.log("doctors seeded  ", response);
+  //   });
 
   await prisma.patient
     .createMany({ data: patients, skipDuplicates: true })
@@ -28,7 +29,10 @@ const seed = async () => {
     .then((response) => {
       console.log("patientsMedInfos seeded  ", response);
     });
-
+    await prisma.appointment.createMany({ data: appoitments, skipDuplicates: false })
+    .then((response) => {
+      console.log("patientsMedInfos seeded  ", response);
+    });
     await prisma.request
     .createMany({ data: requests, skipDuplicates: true })
     .then((response) => {
