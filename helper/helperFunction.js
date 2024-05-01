@@ -34,9 +34,9 @@ const upload = async (buffer) => {
         if(doctor.location.place.city===city&&doctor.location.place.district===district) 
        
         sortedDoctors.push(doctor);
-    }
+    };
     return sortedDoctors.slice(0, count);
-    }
+    };
   
 
   

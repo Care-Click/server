@@ -28,7 +28,6 @@ const signup = async (req, res) => {
 
     res.status(201).send("Patient  Registred ");
   } catch (error) {
-
     res.status(401).send(error);
   }
 };
@@ -56,11 +55,11 @@ const signin = async (req, res) => {
       return res.status(401).json("Password is incorrect.");
     }
 
-    // Generate a JSON Web Token (JWT) for authentication
+    // Generate  jwt
     const token = jwt.sign(
       {
         patientId: patient.id,
-        role: patient.role
+        role: patient.role,
       },
       process.env.JWT_SECRET,
       {
@@ -72,7 +71,6 @@ const signin = async (req, res) => {
       id: patient.id,
       FullName: patient.FullName,
     };
-
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
     console.log(error);
@@ -80,16 +78,17 @@ const signin = async (req, res) => {
   }
 };
 
-// getting one specific  doctor 
+// getting one specific  doctor
 
 const getOneDoctor = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { doctorId } = req.params;
+    console.log(doctorId);
 
     const doctor = await prisma.doctor.findUnique({
-      where: { id: parseInt(id) },
-
+      where: { id: parseInt(doctorId) },
     });
+    console.log(doctor);
 
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
@@ -104,54 +103,48 @@ const getOneDoctor = async (req, res) => {
 
 const getNear = async (req, res) => {
   try {
-    const { city, district } = req.params
+    const patientId = req.patientId;
+    let patient = await prisma.patient.findUnique({
+      where: {
+        id: patientId,
+      },
+    });
+    console.log(patient.location);
+
+    const { place } = JSON.parse(patient.location);
+    console.log(place);
     let result = await prisma.doctor.findMany();
 
-    let docNear = findNearestDoctors(result, city, district, (count = 3));
+    let docNear = findNearestDoctors(
+      result,
+      place.city,
+      place.district,
+      (count = 3)
+    );
     res.status(200).send(docNear);
   } catch (error) {
     console.log(error);
   }
 };
 
-const sendReq = async (req, res) => {
-  try {
-
-    const newrequest = {
-      message: req.body.message,
-      status: "pending",
-      patientId: JSON.parse(req.patientId),
-      doctorId: null,
-    };
-
-    const request = await prisma.request.create({
-
-      data: newrequest,
-    });
-    res.status(201).json(request);
-  } catch (error) {
-    console.log(error);
-    res.status(401).json(error);
-  }
-};
 const search = async (req, res) => {
   try {
     const { speciality } = req.params;
+    console.log(speciality);
     const doctors = await prisma.doctor.findMany({
       where: {
         speciality: { contains: speciality },
       },
       include: { MedicalExp: true },
     });
-
     if (!doctors || doctors.length === 0) {
       return res.status(404).json({ error: " not found" });
     }
-    for (let i = 0; i < doctors.length; i++) {
-      doctors[i].location = JSON.parse(doctors[i].location);
-    }
+
     res.status(201).json(doctors);
   } catch (error) {
+    console.log(error);
+
     console.error("Error fetching doctor:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -159,7 +152,7 @@ const search = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { patientId } = req.params;
+    const patientId = req.patientId;
     const { FullName, date_of_birth, email, password, phone_number, location } =
       req.body;
 
@@ -177,12 +170,9 @@ const updateProfile = async (req, res) => {
     if (password) {
       // Hash the password if provided
       dataToUpdate.password = bcrypt.hashSync(password, 8);
-
     }
-    if (phone_number)
-      dataToUpdate.phone_number = phone_number;
-    if (location)
-      dataToUpdate.location = location;
+    if (phone_number) dataToUpdate.phone_number = phone_number;
+    if (location) dataToUpdate.location = location;
 
     // Check if an image file is provided in the request
     if (req.files && req.files[0] && req.files[0].buffer) {
@@ -200,31 +190,29 @@ const updateProfile = async (req, res) => {
     });
 
     res.status(201).send("Patient updated");
-
   } catch (error) {
-console.log(error);
+    console.log(error);
     res.status(500).json(error);
   }
 };
 
 const getMedicalInfo = async (req, res) => {
   try {
-    let doctorId = req.doctorId;
+    let patientId = req.patientId;
     const medicalInfo = await prisma.medicalInfo.findUnique({
       where: {
-        patientId: doctorId,
+        patientId: patientId,
       },
     });
     res.status(201).send(medicalInfo);
   } catch (error) {
-
     res.status(500).json(error);
   }
 };
 
 const getPatientDoctors = async (req, res) => {
   try {
-    const patientId = req.patientId
+    const patientId = req.patientId;
 
     const Patient = await prisma.patient.findUnique({
       where: {
@@ -232,13 +220,11 @@ const getPatientDoctors = async (req, res) => {
       },
       include: {
         doctors: true,
-      }
+      },
     });
 
     res.status(200).json(Patient.doctors);
-
   } catch (error) {
-
     console.log(error);
 
     res.status(500).json(error);
@@ -247,14 +233,10 @@ const getPatientDoctors = async (req, res) => {
 
 const getPatientRequests = async (req, res) => {
   try {
-
-    const { patientId } = req.params;
-
-    console.log(patientId);
-
+    const patientId = req.patientId;
     const requests = await prisma.request.findMany({
       where: {
-        patientId: parseInt(patientId),
+        patientId: patientId,
       },
       include: {
         Doctor: {
@@ -268,14 +250,11 @@ const getPatientRequests = async (req, res) => {
     });
 
     for (let index = 0; index < requests.length; index++) {
-
       const element = requests[index];
 
       if (element.Doctor) {
-
         // element.Doctor.location = JSON.parse(element.Doctor.location);
       }
-
     }
 
     res.status(200).json(requests);
