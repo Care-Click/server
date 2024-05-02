@@ -3,8 +3,8 @@ const router = express.Router();
 const {addAppointment,getAppointements } = require('../controllers/appointments.js')
 const isDoctorAuthenticated=require('../middlewares/isDoctorAuthenticated.js')
 
-router.post("/addAppointement", isDoctorAuthenticated,addAppointment);
+router.post("/addAppointement/:doctorId",addAppointment);
 
-router.get("/getAppointements", isDoctorAuthenticated,getAppointements)
+router.get("/getAppointements/:doctorId",getAppointements)
 
 module.exports = router    
