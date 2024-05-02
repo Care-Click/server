@@ -143,12 +143,12 @@ const getAllMessagesofPatient = async (req, res) => {
   try {
     const messages = await prisma.message.findMany({
       where: {
-        toPatientId : patientId 
+       toPatientId : patientId 
       },
       orderBy: {
         createdAt: "desc",
       },
-      distinct : ["fromDoctorId"],
+      distinct : [ "fromDoctorId"],
       select: {
         id: true,
         content: true,
@@ -171,18 +171,18 @@ const getAllMessagesofPatient = async (req, res) => {
       },
     });
 
-    const enhancedMessages = messages.map((message) => {
-      const sender = "Doctor"; 
-      const receiver = "Patient";
+    // const enhancedMessages = messages.map((message) => {
+    //   const sender = "Doctor"; 
+    //   const receiver = "Patient";
 
-      return {
-        ...message,
-        sender,
-        receiver,
-      };
-    });
+    //   return {
+    //     ...message,
+    //     sender,
+    //     receiver,
+    //   };
+    // });
 
-    res.status(200).json(enhancedMessages);
+    res.status(200).json(messages);
   } catch (error) {
     console.error("Failed to get messages:", error);
     res
