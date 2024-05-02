@@ -191,24 +191,17 @@ const getDoctor=  async(req,res)=>{
 const updateDoctors =async (req,res)=>{
   const doctorId=req.doctorId
   try {
-    const { FullName, date_of_birth, email, password, phone_number, location } =
-      req.body;
+    const location=req.body.location
+    const { FullName, email, phone_number } =
+    JSON.parse(req.body.data)
     // Initialize an empty object to store the fields to update
     let dataToUpdate = {};
 
     // Check each field and add it to the dataToUpdate object if it's provided in the request body
     if (FullName) dataToUpdate.FullName = FullName;
-    if (date_of_birth) {
-      // Convert and format date_of_birth if provided
-      const formattedDateOfBirth = new Date(date_of_birth).toISOString();
-      dataToUpdate.date_of_birth = formattedDateOfBirth;
-    }
+    
     if (email) dataToUpdate.email = email;
-    if (password) {
-      // Hash the password if provided
-      dataToUpdate.password = bcrypt.hashSync(password, 8);
-
-    }
+    
     if (phone_number)
       dataToUpdate.phone_number = phone_number;
     if (location)
