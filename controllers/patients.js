@@ -6,6 +6,8 @@ const {
   findNearestDoctors,
 } = require("../helper/helperFunction.js");
 
+const {upload}=require("../helper/helperFunction.js")
+
 const signup = async (req, res) => {
   try {
     let { password, date_of_birth } = req.body;
@@ -56,7 +58,7 @@ const signin = async (req, res) => {
     }
 
     // Generate  jwt
-    const token = jwt.sign(
+    let token = jwt.sign(
       {
         patientId: patient.id,
         role: patient.role,
@@ -71,6 +73,7 @@ const signin = async (req, res) => {
       id: patient.id,
       FullName: patient.FullName,
     };
+    token= "Bearer "+token
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
     console.log(error);
@@ -83,12 +86,10 @@ const signin = async (req, res) => {
 const getOneDoctor = async (req, res) => {
   try {
     const { doctorId } = req.params;
-    console.log(doctorId);
 
     const doctor = await prisma.doctor.findUnique({
       where: { id: parseInt(doctorId) },
     });
-    console.log(doctor);
 
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
@@ -109,7 +110,6 @@ const getNear = async (req, res) => {
         id: patientId,
       },
     });
-    console.log(patient.location);
 
     const { place } = JSON.parse(patient.location);
     console.log(place);
@@ -155,7 +155,7 @@ const updateProfile = async (req, res) => {
     const patientId = req.patientId;
     const { FullName, date_of_birth, email, password, phone_number, location } =
       req.body;
-
+console.log(req.body);
     // Initialize an empty object to store the fields to update
     let dataToUpdate = {};
 
@@ -175,17 +175,15 @@ const updateProfile = async (req, res) => {
     if (location) dataToUpdate.location = location;
 
     // Check if an image file is provided in the request
-    if (req.files && req.files[0] && req.files[0].buffer) {
-      const imageBuffer = req.files[0].buffer;
-
+    if (req.body.imageUrl) {
       // Uploading image to Cloudinary
-      const imageUrl = await upload(imageBuffer);
-      if (imageUrl) dataToUpdate.imageUrl = imageUrl;
+      const image = await upload(req.body.imageUrl);
+      dataToUpdate.imageUrl = image;
     }
 
     // Update the patient with the specified fields
     const updatePatient = await prisma.patient.update({
-      where: { id: parseInt(patientId) },
+      where: { id: patientId },
       data: dataToUpdate,
     });
 
