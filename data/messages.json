@@ -1,0 +1,75 @@
+[
+    {
+      "content": "Hi Doctor, I need to discuss my recent symptoms.",
+      "createdAt": "2024-05-01T08:00:00Z",
+      "updatedAt": "2024-05-01T08:00:00Z",
+      "fromPatientId": 1,
+      "fromDoctorId": null,
+      "toPatientId": null,
+      "toDoctorId": 1
+    },
+    {
+      "content": "Please let me know a convenient time for an appointment.",
+      "createdAt": "2024-05-01T09:00:00Z",
+      "updatedAt": "2024-05-01T09:00:00Z",
+      "fromPatientId": 1,
+      "fromDoctorId": null,
+      "toPatientId": null,
+      "toDoctorId": 1
+    },
+    {
+      "content": "Hello, I received your message, let's schedule an appointment for tomorrow.",
+      "createdAt": "2024-05-01T10:00:00Z",
+      "updatedAt": "2024-05-01T10:00:00Z",
+      "fromPatientId": null,
+      "fromDoctorId": 1,
+      "toPatientId": 1,
+      "toDoctorId": null
+    },
+    {
+      "content": "Thank you, Doctor. What time would be suitable?",
+      "createdAt": "2024-05-01T10:05:00Z",
+      "updatedAt": "2024-05-01T10:05:00Z",
+      "fromPatientId": 1,
+      "fromDoctorId": null,
+      "toPatientId": null,
+      "toDoctorId": 1
+    },
+    {
+      "content": "How about 10 AM tomorrow?",
+      "createdAt": "2024-05-01T10:10:00Z",
+      "updatedAt": "2024-05-01T10:10:00Z",
+      "fromPatientId": null,
+      "fromDoctorId": 1,
+      "toPatientId": 1,
+      "toDoctorId": null
+    },
+    {
+      "content": "That works for me. See you then.",
+      "createdAt": "2024-05-01T10:15:00Z",
+      "updatedAt": "2024-05-01T10:15:00Z",
+      "fromPatientId": 1,
+      "fromDoctorId": null,
+      "toPatientId": null,
+      "toDoctorId": 1
+    },
+    {
+      "content": "Reminder: Appointment tomorrow at 10 AM. Please be on time.",
+      "createdAt": "2024-05-02T09:00:00Z",
+      "updatedAt": "2024-05-02T09:00:00Z",
+      "fromPatientId": null,
+      "fromDoctorId": 1,
+      "toPatientId": 1,
+      "toDoctorId": null
+    },
+    {
+      "content": "Got it, thank you!",
+      "createdAt": "2024-05-02T09:05:00Z",
+      "updatedAt": "2024-05-02T09:05:00Z",
+      "fromPatientId": 1,
+      "fromDoctorId": null,
+      "toPatientId": null,
+      "toDoctorId": 1
+    }
+  ]
+  
