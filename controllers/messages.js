@@ -14,8 +14,8 @@ const sendMessagesToPatient = async (req, res) => {
     const message = await prisma.message.create({
       data: {
         content,
-        fromDoctorId: doctorId, // Doctor sending the message
-        toPatientId: patientId, // Patient receiving the message
+        fromDoctorId: doctorId, 
+        toPatientId: patientId, 
       },
     });
 
@@ -97,8 +97,8 @@ const getAllMessagesofDoctor = async (req, res) => {
     });
 
     const enhancedMessages = messages.map((message) => {
-      const sender = "Patient"; // Since the doctor is the receiver, the sender is always the patient
-      const receiver = "Doctor"; // Since the doctor is the receiver, the receiver is always the doctor
+      const sender = "Patient"; 
+      const receiver = "Doctor";
 
       return {
         ...message,
@@ -123,14 +123,14 @@ const sendMessageToDoctor = async (req, res) => {
     const message = await prisma.message.create({
       data: {
         content,
-        fromPatientId: patientId, // Patient sending the message
-        toDoctorId: doctorId, // Doctor receiving the message
+        fromPatientId: patientId, 
+        toDoctorId: doctorId, 
       },
     });
 
     res.json(message);
   } catch (error) {
-    console.error("Failed to send message from patient:", error);
+    
     res
       .status(500)
       .json({ error: "Could not send message due to server error." });
@@ -184,7 +184,6 @@ const getAllMessagesofPatient = async (req, res) => {
 
     res.status(200).json(enhancedMessages);
   } catch (error) {
-    console.error("Failed to get messages:", error);
     res
       .status(500)
       .json({ error: "Could not retrieve messages due to a server error." });
@@ -216,10 +215,10 @@ const getMessagesFromDoctor = async (req, res) => {
       },
     });
 
-    console.log(messages);
+    
     res.status(200).send({ messages, doctor, patient });
   } catch (error) {
-    console.error("Failed to get messages:", error);
+    
     res
       .status(500)
       .json({ error: "Could not retrieve messages due to a server error." });
