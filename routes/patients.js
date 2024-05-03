@@ -8,7 +8,7 @@ const {
   search,
   getNear,
   updateProfile,
-  getMedicalInfo,
+  getInfo,
   getPatientDoctors,
   getPatientRequests
 } = require("../controllers/patients");
@@ -21,7 +21,7 @@ router.get("/getNearByDoctors",isPatientAuthenticated, getNear);
 
 router.get("/getOneDoctor/:doctorId",isPatientAuthenticated,getOneDoctor);
 
-router.get("/getMedicalInfo",isPatientAuthenticated, getMedicalInfo) 
+router.get("/getInfo",isPatientAuthenticated, getInfo) 
 
 router.get("/search/:speciality",isPatientAuthenticated,search);
 

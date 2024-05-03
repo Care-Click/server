@@ -16,7 +16,9 @@ const signup = async (req, res) => {
 
     date_of_birth = date_of_birth.toISOString();
 
-    const newPatient = { ...req.body, date_of_birth };
+    const profile_picture = await upload(req.files[0].buffer);
+
+     const newPatient = { ...req.body, date_of_birth, profile_picture};
 
     newPatient.verification_code = rundomNumber();
 
@@ -30,11 +32,13 @@ const signup = async (req, res) => {
 
     res.status(201).send("Patient  Registred ");
   } catch (error) {
+    console.log(error)
     res.status(401).send(error);
   }
 };
 const signin = async (req, res) => {
   const { email, password } = req.body;
+
 
   if (!email || !password) {
     return res.status(404).json("Email or Password should be provided");
@@ -77,6 +81,7 @@ const signin = async (req, res) => {
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
     console.log(error);
+    console.log(error)
     res.status(500).send("Internal server error");
   }
 };
@@ -130,7 +135,6 @@ const getNear = async (req, res) => {
 const search = async (req, res) => {
   try {
     const { speciality } = req.params;
-    console.log(speciality);
     const doctors = await prisma.doctor.findMany({
       where: {
         speciality: { contains: speciality },
@@ -155,7 +159,6 @@ const updateProfile = async (req, res) => {
     const patientId = req.patientId;
     const { FullName, date_of_birth, email, password, phone_number, location } =
       req.body;
-console.log(req.body);
     // Initialize an empty object to store the fields to update
     let dataToUpdate = {};
 
@@ -172,13 +175,13 @@ console.log(req.body);
       dataToUpdate.password = bcrypt.hashSync(password, 8);
     }
     if (phone_number) dataToUpdate.phone_number = phone_number;
-    if (location) dataToUpdate.location = location;
+    if (location) dataToUpdate.location = JSON.stringify(location);
 
     // Check if an image file is provided in the request
-    if (req.body.imageUrl) {
+    if (req.files[0].buffer) {
       // Uploading image to Cloudinary
-      const image = await upload(req.body.imageUrl);
-      dataToUpdate.imageUrl = image;
+      const image = await upload(req.files[0].buffer);
+      dataToUpdate.profile_picture = image;
     }
 
     // Update the patient with the specified fields
@@ -194,17 +197,18 @@ console.log(req.body);
   }
 };
 
-const getMedicalInfo = async (req, res) => {
+const getInfo = async (req, res) => {
+  let  patientId  = req.patientId;
+
   try {
-    let patientId = req.patientId;
-    const medicalInfo = await prisma.medicalInfo.findUnique({
-      where: {
-        patientId: patientId,
-      },
+    const patientWithMedicalInfo = await prisma.patient.findUnique({
+      where: { id: patientId },
+      include: { medicalInfo: true },
     });
-    res.status(201).send(medicalInfo);
+
+    res.status(200).json(patientWithMedicalInfo);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(404).send(error);
   }
 };
 
@@ -268,7 +272,7 @@ module.exports = {
   search,
   getNear,
   updateProfile,
-  getMedicalInfo,
+  getInfo,
   getPatientDoctors,
   getPatientRequests,
 };
