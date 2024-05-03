@@ -1,8 +1,8 @@
 const prisma = require("../db/prisma");
 
 const addAppointment = async (req, res) => {
-  const doctorId  = req.doctorId;
-  const app = { ...req.body, doctorId };
+  const doctorId  = req.params.doctorId;
+  const app = { ...req.body, doctorId:parseInt(doctorId) };
   try {
     const newApp = await prisma.appointment.create({
       data: app,
@@ -17,18 +17,19 @@ const addAppointment = async (req, res) => {
         });
     }
     console.log(error);
+    
     res.status(500).json({ error: "Error creating appointment." });
   }
 };
 
 const getAppointements = async (req, res) => {
 
-  const doctorId = req.doctorId;
-
+  const doctorId = req.params.doctorId;
+console.log(doctorId);
   try {
     const appoitments = await prisma.appointment.findMany({
       where: {
-        doctorId: doctorId,
+        doctorId: parseInt(doctorId),
       },
     });
     res.status(201).json(appoitments);
