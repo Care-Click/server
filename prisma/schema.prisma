@@ -19,11 +19,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Conversation {
+  id        Int       @id @default(autoincrement())
+  doctorId  Int
+  doctor    Doctor    @relation(fields: [doctorId], references: [id])
+  patientId Int
+  patient   Patient   @relation(fields: [patientId], references: [id])
+  messages  Message[]
+  
+   @@unique([doctorId, patientId])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  createdAt      DateTime     @default(now())
+  conversationId Int          @unique
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  senderId       Int
+  sender         String // 'Doctor' or 'Patient' to identify sender role
+  Doctor         Doctor?      @relation(fields: [doctorId], references: [id])
+  doctorId       Int?
+  Patient        Patient?     @relation(fields: [patientId], references: [id])
+  patientId      Int?
+}
+
 model Doctor {
-  id              Int           @id @unique @default(autoincrement())
+  id              Int            @id @unique @default(autoincrement())
   FullName        String
   date_of_birth   DateTime
-  email           String        @unique
+  email           String         @unique
   password        String
   phone_number    String
   gender          String
@@ -33,11 +58,12 @@ model Doctor {
   status          Boolean
   role            String
   speciality      String
-  patients        Patient[]     @relation("DoctorToPatient")
-  doctorRequests  Request[]     @relation("DoctorRequests")
+  patients        Patient[]      @relation("DoctorToPatient")
+  doctorRequests  Request[]      @relation("DoctorRequests")
   MedicalExp      MedicalExp?
-  appointments    Appointment[] @relation("DoctorAppointments")
-  messages        Message[]     @relation("MessagesFromDoctor")
+  appointments    Appointment[]  @relation("DoctorAppointments")
+  conversations   Conversation[]
+  messages        Message[]
 }
 
 model MedicalExp {
@@ -76,10 +102,10 @@ model Report {
 }
 
 model Patient {
-  id                Int          @id @unique @default(autoincrement())
+  id                Int            @id @unique @default(autoincrement())
   FullName          String
   date_of_birth     DateTime
-  email             String       @unique
+  email             String         @unique
   password          String
   phone_number      String
   Gender            String
@@ -87,10 +113,11 @@ model Patient {
   location          String
   verification_code String
   role              String
-  doctors           Doctor[]     @relation("DoctorToPatient")
+  doctors           Doctor[]       @relation("DoctorToPatient")
   requests          Request[]
   medicalInfo       MedicalInfo?
-  messages          Message[]    @relation("MessagesFromPatient")
+  conversations     Conversation[] 
+  messages          Message[]
 }
 
 model MedicalInfo {
@@ -106,19 +133,6 @@ model MedicalInfo {
   patientId                Int?     @unique
 }
 
-model Message {
-  id            Int      @id @default(autoincrement())
-  content       String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  fromPatientId Int?
-  patient       Patient? @relation("MessagesFromPatient", fields: [fromPatientId], references: [id])
-  fromDoctorId  Int?
-  doctor        Doctor?  @relation("MessagesFromDoctor", fields: [fromDoctorId], references: [id])
-  toPatientId   Int?
-  toDoctorId    Int?
-}
-
 model Appointment {
   id          Int      @id @unique @default(autoincrement())
   dateTime    DateTime
@@ -127,6 +141,6 @@ model Appointment {
   createdAt   DateTime @default(now())
   doctor      Doctor   @relation("DoctorAppointments", fields: [doctorId], references: [id])
   doctorId    Int
-  
+
   @@unique([dateTime, doctorId])
 }
