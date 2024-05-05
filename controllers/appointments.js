@@ -1,8 +1,12 @@
 const prisma = require("../db/prisma");
 
 const addAppointment = async (req, res) => {
-  const doctorId  = req.params.doctorId;
-  const app = { ...req.body, doctorId:parseInt(doctorId) };
+;
+
+  const doctorId  = parseInt(req.params.doctorId);
+
+  const app = { ...req.body,doctorId };
+
   try {
     const newApp = await prisma.appointment.create({
       data: app,
@@ -25,7 +29,7 @@ const addAppointment = async (req, res) => {
 const getAppointements = async (req, res) => {
 
   const doctorId = req.params.doctorId;
-console.log(doctorId);
+
   try {
     const appoitments = await prisma.appointment.findMany({
       where: {
