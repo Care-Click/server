@@ -26,8 +26,8 @@ model Conversation {
   patientId Int
   patient   Patient   @relation(fields: [patientId], references: [id])
   messages  Message[]
-  
-   @@unique([doctorId, patientId])
+
+  @@unique([doctorId, patientId])
 }
 
 model Message {
@@ -45,10 +45,10 @@ model Message {
 }
 
 model Doctor {
-  id              Int            @id @unique @default(autoincrement())
+  id              Int              @id @unique @default(autoincrement())
   FullName        String
   date_of_birth   DateTime
-  email           String         @unique
+  email           String           @unique
   password        String
   phone_number    String
   gender          String
@@ -58,12 +58,13 @@ model Doctor {
   status          Boolean
   role            String
   speciality      String
-  patients        Patient[]      @relation("DoctorToPatient")
-  doctorRequests  Request[]      @relation("DoctorRequests")
+  patients        Patient[]        @relation("DoctorToPatient")
+  doctorRequests  Request[]        @relation("DoctorRequests")
   MedicalExp      MedicalExp?
-  appointments    Appointment[]  @relation("DoctorAppointments")
+  appointments    Appointment[]    @relation("DoctorAppointments")
   conversations   Conversation[]
   messages        Message[]
+ favoriteDoctors FavoriteDoctor[]
 }
 
 model MedicalExp {
@@ -102,10 +103,10 @@ model Report {
 }
 
 model Patient {
-  id                Int            @id @unique @default(autoincrement())
+  id                Int              @id @unique @default(autoincrement())
   FullName          String
   date_of_birth     DateTime
-  email             String         @unique
+  email             String           @unique
   password          String
   phone_number      String
   Gender            String
@@ -113,11 +114,12 @@ model Patient {
   location          String
   verification_code String
   role              String
-  doctors           Doctor[]       @relation("DoctorToPatient")
+  doctors           Doctor[]         @relation("DoctorToPatient")
   requests          Request[]
   medicalInfo       MedicalInfo?
-  conversations     Conversation[] 
+  conversations     Conversation[]
   messages          Message[]
+  favoriteDoctors FavoriteDoctor[] 
 }
 
 model MedicalInfo {
@@ -143,4 +145,15 @@ model Appointment {
   doctorId    Int
 
   @@unique([dateTime, doctorId])
+}
+
+model FavoriteDoctor {
+  id         Int        @id @unique @default(autoincrement())
+  patient    Patient    @relation(fields: [patientId], references: [id])
+  doctor     Doctor     @relation(fields: [doctorId], references: [id])
+  createdAt  DateTime   @default(now())
+  patientId  Int
+  doctorId   Int
+
+  @@unique([patientId, doctorId], name: "favorite_doctor")
 }
