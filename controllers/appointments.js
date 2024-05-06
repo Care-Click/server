@@ -1,9 +1,12 @@
 const prisma = require("../db/prisma");
 
 const addAppointment = async (req, res) => {
+;
+
   const doctorId  = parseInt(req.params.doctorId);
 
   const app = { ...req.body,doctorId };
+
   try {
     const newApp = await prisma.appointment.create({
       data: app,
@@ -18,6 +21,7 @@ const addAppointment = async (req, res) => {
         });
     }
     console.log(error);
+    
     res.status(500).json({ error: "Error creating appointment." });
   }
 };
