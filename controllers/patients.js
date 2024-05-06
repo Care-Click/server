@@ -203,7 +203,9 @@ const getInfo = async (req, res) => {
   try {
     const patientWithMedicalInfo = await prisma.patient.findUnique({
       where: { id: patientId },
-      include: { medicalInfo: true },
+      include: { medicalInfo: true,
+        favoriteDoctors :true
+       },
     });
 
     res.status(200).json(patientWithMedicalInfo);
@@ -265,6 +267,27 @@ const getPatientRequests = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+const addToFavorite = async (req, res) => {
+  const {doctorId } = req.params; 
+  const patientId = req.patientId;
+  try {
+    const favorite = await prisma.favoriteDoctor.create({
+      data: {
+        patientId: patientId, 
+        doctorId: parseInt(doctorId), 
+      },
+    });
+    
+    // Send success response
+    res.status(201).json({ message: "Doctor added to favorites successfully", favorite });
+  } catch (error) {
+    // Handle error
+    console.error("Error adding doctor to favorites:", error);
+    res.status(500).json({ error: "Failed to add doctor to favorites" });
+  }
+};
+
 module.exports = {
   signup,
   signin,
@@ -275,4 +298,5 @@ module.exports = {
   getInfo,
   getPatientDoctors,
   getPatientRequests,
+  addToFavorite
 };
