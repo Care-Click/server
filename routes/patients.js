@@ -10,7 +10,8 @@ const {
   updateProfile,
   getInfo,
   getPatientDoctors,
-  getPatientRequests
+  getPatientRequests,
+  addToFavorite
 } = require("../controllers/patients");
 
 router.post("/signup", signup);
@@ -30,5 +31,7 @@ router.put("/updateProfile",isPatientAuthenticated,updateProfile);
 router.get("/getPatientDoctors",isPatientAuthenticated,getPatientDoctors);
 
 router.get("/getPatientRequests",isPatientAuthenticated,getPatientRequests);
+
+router.post("/addFavoriteDoctor/:doctorId",isPatientAuthenticated ,addToFavorite)
 
 module.exports = router;
