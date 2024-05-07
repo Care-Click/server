@@ -66,9 +66,9 @@ const accepteRequest = async (req, res) => {
         break;
       }
     }
-    if (test) {
+   
       const newPatients = [...doctor.patients, patient];
-      const docpat = await prisma.doctor.update({
+      var docpat = await prisma.doctor.update({
         where: {
           id: parseInt(doctorId),
         },
@@ -78,8 +78,14 @@ const accepteRequest = async (req, res) => {
           },
         },
       });
-    }
-    res.status(200).send({ docpat });
+      const conversation = await prisma.conversation.create({
+        data: {
+          doctorId,
+          patientId: result.patientId,
+        },
+      });
+
+    res.status(200).send({ conversation });
   } catch (error) {
     console.log(error);
     res.send(error);
