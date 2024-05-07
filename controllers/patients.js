@@ -117,9 +117,9 @@ const getNear = async (req, res) => {
     });
 
     const { place } = JSON.parse(patient.location);
-    console.log(place);
-    let result = await prisma.doctor.findMany();
 
+    let result = await prisma.doctor.findMany();
+    
     let docNear = findNearestDoctors(
       result,
       place.city,
@@ -203,8 +203,13 @@ const getInfo = async (req, res) => {
   try {
     const patientWithMedicalInfo = await prisma.patient.findUnique({
       where: { id: patientId },
-      include: { medicalInfo: true,
-        favoriteDoctors :true
+      include: { 
+        medicalInfo: true,
+        favoriteDoctors :{
+          include:{
+            doctor:true
+          }
+        }
        },
     });
 
@@ -269,22 +274,39 @@ const getPatientRequests = async (req, res) => {
 };
 
 const addToFavorite = async (req, res) => {
-  const {doctorId } = req.params; 
+  const { doctorId } = req.params;
   const patientId = req.patientId;
+
   try {
-    const favorite = await prisma.favoriteDoctor.create({
-      data: {
-        patientId: patientId, 
-        doctorId: parseInt(doctorId), 
+    // Check if the doctor is already a favorite
+    const existingFavorite = await prisma.favoriteDoctor.findFirst({
+      where: {
+        patientId: patientId,
+        doctorId: parseInt(doctorId),
       },
     });
-    
-    // Send success response
-    res.status(201).json({ message: "Doctor added to favorites successfully", favorite });
+
+    if (existingFavorite) {
+      // If the doctor is already a favorite, remove it from favorites
+      await prisma.favoriteDoctor.delete({
+        where: {
+          id: existingFavorite.id,
+        },
+      });
+      res.status(200).json({ message: "Doctor removed from favorites successfully" });
+    } else {
+      // If the doctor is not a favorite, add it to favorites
+      const favorite = await prisma.favoriteDoctor.create({
+        data: {
+          patientId: patientId,
+          doctorId: parseInt(doctorId),
+        },
+      });
+      res.status(201).json({ message: "Doctor added to favorites successfully", favorite });
+    }
   } catch (error) {
-    // Handle error
-    console.error("Error adding doctor to favorites:", error);
-    res.status(500).json({ error: "Failed to add doctor to favorites" });
+    console.error(error);
+    res.status(500).json(error);
   }
 };
 
