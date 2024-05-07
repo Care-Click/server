@@ -34,14 +34,9 @@ model Message {
   id             Int          @id @default(autoincrement())
   content        String
   createdAt      DateTime     @default(now())
-  conversationId Int          @unique
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  senderId       Int
-  sender         String // 'Doctor' or 'Patient' to identify sender role
-  Doctor         Doctor?      @relation(fields: [doctorId], references: [id])
-  doctorId       Int?
-  Patient        Patient?     @relation(fields: [patientId], references: [id])
-  patientId      Int?
+  conversationId Int
+  sender         String
 }
 
 model Doctor {
@@ -63,8 +58,11 @@ model Doctor {
   MedicalExp      MedicalExp?
   appointments    Appointment[]    @relation("DoctorAppointments")
   conversations   Conversation[]
-  messages        Message[]
+
+
+
  favoriteDoctors FavoriteDoctor[]
+
 }
 
 model MedicalExp {
@@ -117,9 +115,9 @@ model Patient {
   doctors           Doctor[]         @relation("DoctorToPatient")
   requests          Request[]
   medicalInfo       MedicalInfo?
-  conversations     Conversation[]
-  messages          Message[]
+  conversations     Conversation[]  
   favoriteDoctors FavoriteDoctor[] 
+
 }
 
 model MedicalInfo {
