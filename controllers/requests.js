@@ -1,6 +1,9 @@
 const { where } = require("sequelize");
 const prisma = require("../db/prisma");
 const jwt = require("jsonwebtoken");
+const { sendemail } = require("../helper/helperFunction");
+
+
 const createReport = async (req, res) => {
   const { request } = req.params;
   const {
@@ -118,6 +121,13 @@ const getRequests = async (req, res) => {
 const sendReq = async (req, res) => {
   const patientId=req.patientId
   try {
+
+const patient = await prisma.patient.findUnique({
+  where : {id:patientId}
+})
+
+ const name = patient.FullName
+
     const newrequest = {
       message: req.body.message,
       status: "Pending",
@@ -130,7 +140,10 @@ const sendReq = async (req, res) => {
     const request = await prisma.request.create({
       data: newrequest,
     });
+    sendemail(req.body.message,name)
     console.log(request);
+
+
 
     res.status(201).json(request);
 
@@ -171,9 +184,6 @@ const automateFill = async (req, res) => {
       res.status(201).json(updatedMedicalInfo);
 
     }
-
-
-
 
 
   } catch (error) {
