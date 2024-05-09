@@ -49,7 +49,7 @@ model Doctor {
   gender          String
   profile_picture String
   location        String
-  verified        Boolean
+  verified        Boolean          @default(false)
   status          Boolean
   role            String
   speciality      String
@@ -58,12 +58,11 @@ model Doctor {
   MedicalExp      MedicalExp?
   appointments    Appointment[]    @relation("DoctorAppointments")
   conversations   Conversation[]
-
-
-
- favoriteDoctors FavoriteDoctor[]
-
+  favoriteDoctors FavoriteDoctor[]
+  subscribed      Boolean            @default(false)
+  paymentMade     Boolean            @default(false)
 }
+
 
 model MedicalExp {
   id         Int     @id @unique @default(autoincrement())
