@@ -81,11 +81,19 @@ const signin = async (req, res) => {
       return res.status(404).json("doctor not found");
     }
 
+    
+
     const cofirmPassword = await bcrypt.compare(password, doctor.password);
 
     if (!cofirmPassword) {
       return res.status(401).json("Password is incorrect.");
     }
+    
+    if(doctor.verified === false){
+      return res.status(403).json("this is user is not verified yet ")
+
+    }
+
 
     const token = jwt.sign(
       {
