@@ -12,6 +12,7 @@ const messageRouter = require ("./routes/messages");
 const conversationRouter = require ("./routes/conversations");
 const adminRouter  = require("./routes/admin")
 const appointmentRouter  = require("./routes/appoitments")
+const paymentRouter = require("./routes/payment")
 
 const app = express();
 const upload = multer();
@@ -20,7 +21,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:8081",
-  },
+  }, 
 });
 
 
@@ -37,6 +38,7 @@ app.use("/api/messages", messageRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/admin",adminRouter)
 app.use("/api/appointment",appointmentRouter)
+app.use("/api/payments",paymentRouter)
 
 io.on('connection', (socket) => {
   console.log('New client connected');
