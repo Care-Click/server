@@ -69,7 +69,7 @@ const signin = async (req, res) => {
 
   if (!email || !password) {
     return res.status(404).json("Email or Password should be provided");
-  }
+  } 
 
   try {
     const doctor = await prisma.doctor.findUnique({
@@ -89,12 +89,13 @@ const signin = async (req, res) => {
       return res.status(401).json("Password is incorrect.");
     }
     
-    if(doctor.verified === false){
-      return res.status(403).json("this is user is not verified yet ")
-
+    if(doctor.verified === false) {
+      return res.status(403).json("Sorry , you're not verified yet ")
     }
-
-
+    if (doctor.verified && !doctor.subscribed ) {
+      return res.status(405).json("You have to subscribe.");
+    }
+    
     const token = jwt.sign(
       {
         doctorId: doctor.id,
