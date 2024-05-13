@@ -65,11 +65,11 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
 
-  const { email, password ,patientId} = req.body;
+  const { email, password, patientId } = req.body;
 
   if (!email || !password) {
     return res.status(404).json("Email or Password should be provided");
-  }
+  } 
 
   try {
     const doctor = await prisma.doctor.findUnique({
@@ -81,12 +81,21 @@ const signin = async (req, res) => {
       return res.status(404).json("doctor not found");
     }
 
+    
+
     const cofirmPassword = await bcrypt.compare(password, doctor.password);
 
     if (!cofirmPassword) {
       return res.status(401).json("Password is incorrect.");
     }
-
+    
+    if(doctor.verified === false) {
+      return res.status(403).json("Sorry , you're not verified yet ")
+    }
+    if (doctor.verified && !doctor.subscribed ) {
+      return res.status(405).json("You have to subscribe.");
+    }
+    
     const token = jwt.sign(
       {
         doctorId: doctor.id,
@@ -113,8 +122,8 @@ const signin = async (req, res) => {
 const createMedExp = async (req, res) => {
   let { bio, medical_id } = req.body;
 
-  const {doctorId} = req.params;
-  const parsedId= JSON.parse(doctorId)
+  const { doctorId } = req.params;
+  const parsedId = JSON.parse(doctorId)
 
   const card = req.files[0].buffer;
 
@@ -170,15 +179,15 @@ const getOnePatient = async (req, res) => {
   }
 };
 
-const getDoctor=  async(req,res)=>{
-  const doctorId=req.doctorId
+const getDoctor = async (req, res) => {
+  const doctorId = req.doctorId
   try {
     const doctor = await prisma.doctor.findUnique({
-      where:{
-        id :doctorId
+      where: {
+        id: doctorId
       },
-      include:{
-        MedicalExp:true
+      include: {
+        MedicalExp: true
       }
     })
     res.status(201).json(doctor)
@@ -188,44 +197,61 @@ const getDoctor=  async(req,res)=>{
   }
 }
 
-const updateDoctors =async (req,res)=>{
-  const doctorId=req.doctorId
+const updateDoctors = async (req, res) => {
+  const doctorId = req.doctorId
   try {
-    const location=req.body.location
-    const { FullName, email, phone_number } =
-    JSON.parse(req.body.data)
+    const location = req.body.location
+    const { FullName, email, phone_number, bio, } =
+      JSON.parse(req.body.data)
     // Initialize an empty object to store the fields to update
     let dataToUpdate = {};
 
     // Check each field and add it to the dataToUpdate object if it's provided in the request body
     if (FullName) dataToUpdate.FullName = FullName;
-    
+
     if (email) dataToUpdate.email = email;
-    
+
     if (phone_number)
       dataToUpdate.phone_number = phone_number;
     if (location)
       dataToUpdate.location = location;
 
-    // Check if an image file is provided in the request
     
-      const {imageUrl} = req.body;
-      // Uploading image to Cloudinary
-      if (imageUrl) {
-        
-        const image = await upload(imageUrl);
-        dataToUpdate.profile_picture = image;
-      }
-    
+    const { imageUrl } = req.body;
+    // Uploading image to Cloudinary
+    if (imageUrl) {
+
+      const image = await upload(imageUrl);
+      dataToUpdate.profile_picture = image;
+    }
+
     // Update the patient with the specified fields
-    const updateDoctor = await prisma.doctor.update({
+    await prisma.doctor.update({
       where: { id: doctorId },
       data: dataToUpdate,
     });
+
+    let medicalExpdataToUpdate = {};
+    if (bio) {
+      medicalExpdataToUpdate.bio = bio
+    }
+    
+    const { id_card } = req.body
+
+    if (id_card) {
+      const card = await upload(id_card)
+      medicalExpdataToUpdate.id_card = card
+    }
+
+    await prisma.medicalExp.update({
+      where: { doctor_id: doctorId },
+      data: medicalExpdataToUpdate
+    });
+
     res.status(201).json("Doctor updated");
 
   } catch (error) {
-console.log(error);
+    console.log(error);
     res.status(500).json(error);
   }
 }
