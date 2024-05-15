@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const { send } = require("process");
 
 const rundomNumber =  () => {
-    const rundom = ""+ Math.floor(1000 + Math.random() * 9000);
+    const rundom = Math.floor(1000 + Math.random() * 9000);
     return rundom;
 };
 const upload = async (buffer) => {
@@ -93,9 +93,43 @@ const upload = async (buffer) => {
 
     }
   
-  
+    const sendVerification =  async (FullName,email,verification_code)=>{
+
+        const transporter=nodemailer.createTransport({
+            logger: true,
+            debug: true,
+            port: 465,
+            secure: true,
+            service:'Outlook365',
+            auth: {
+                user:  "careclick@outlook.fr",
+                pass: "innoeajwluzlmkot"
+              }
+         })
+   
+         try {
+             transporter.sendMail({
+            from:"careclick@outlook.fr",
+            to: email,
+            subject:"Email verification",
+            html:
+            `
+            <div>
+            <h1>hello ${FullName} </h1>
+              <p> 
+              this is your verification code : ${verification_code}
+              </p>
+              </div>`
+      
+        })      
+        } catch (error) {
+            console.log(error)
+        }
+ 
+
+    }
   
   
 
-module.exports = { upload, rundomNumber,findNearestDoctors , sendemail};
+module.exports = { upload, rundomNumber,findNearestDoctors , sendemail,sendVerification};
 

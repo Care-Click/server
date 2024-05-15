@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+
 const prisma = require("../db/prisma");
 const jwt = require("jsonwebtoken");
 const { sendemail } = require("../helper/helperFunction");
@@ -99,6 +99,12 @@ const getRequests = async (req, res) => {
   try {
     let doctorId = req.doctorId
     const Requests = await prisma.request.findMany({
+      where: {
+        OR: [
+          { status: "Pending" },
+          { doctorId: doctorId },
+        ],
+      },
       include: {
         Patient: {
           select: {
@@ -108,7 +114,9 @@ const getRequests = async (req, res) => {
           },
         },
       },
-    });
+
+  
+  });
     const reversed = Requests.reverse();
     res.status(200).send({ reversed, doctorId });
   } catch (error) {
@@ -141,14 +149,14 @@ const patient = await prisma.patient.findUnique({
       data: newrequest,
     });
     sendemail(req.body.message,name)
-    console.log(request);
+  
 
 
 
     res.status(201).json(request);
 
   } catch (error) {
-console.log(error);
+    console.log(error);
     res.status(401).json(error);
 
   }

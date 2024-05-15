@@ -53,6 +53,7 @@ model Doctor {
   status          Boolean
   role            String
   speciality      String
+  verification_code Int           @default(0000)
   patients        Patient[]        @relation("DoctorToPatient")
   doctorRequests  Request[]        @relation("DoctorRequests")
   MedicalExp      MedicalExp?

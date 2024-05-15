@@ -2,7 +2,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = require("../db/prisma");
 const { upload } = require("../helper/helperFunction.js");
-
+const {
+  sendVerification,
+  rundomNumber,
+} = require("../helper/helperFunction.js");
 const signup = async (req, res) => {
 
   let {
@@ -38,7 +41,7 @@ const signup = async (req, res) => {
     const imageBuffer = req.files[0].buffer;
 
     const imageUrl = await upload(imageBuffer);
-
+let verification_code=rundomNumber()
     const newDoctor = {
       FullName,
       email,
@@ -49,14 +52,18 @@ const signup = async (req, res) => {
       location,
       role: "doctor",
       verified: true,
-      status: true,
+      status: false,
       profile_picture: imageUrl,
-      speciality
+      speciality,
+      verification_code 
     };
 
-    let result = await prisma.doctor.create({ data: newDoctor });
 
-    res.status(200).send(result);
+
+
+    let result = await prisma.doctor.create({ data: newDoctor });
+    sendVerification(FullName,email,verification_code)
+    res.status(200).json(result);
   } catch (error) {
     res.status(401).send(error);
     console.log(error);
@@ -256,6 +263,31 @@ const updateDoctors = async (req, res) => {
   }
 }
 
+
+const verifydoctor = async (req, res) => {
+  const doctorId =parseInt(req.params.doctorId)
+  console.log(doctorId);
+  try {
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: doctorId }
+    });
+
+    if (doctor.verification_code ==parseInt(req.body.code)) {
+
+       await prisma.doctor.update({
+        where: { id: doctorId },
+        data: {status:true},
+      });
+   
+      return res.status(201).json("Doctor updated");
+    }
+    res.status(400).json(" wrong code ");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+}
+
 module.exports = {
   signup,
   signin,
@@ -263,5 +295,6 @@ module.exports = {
   createMedExp,
   getOnePatient,
   getDoctor,
-  updateDoctors
+  updateDoctors,
+  verifydoctor
 };
