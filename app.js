@@ -36,9 +36,9 @@ app.use("/api/doctors", doctorRouter);
 app.use("/api/requests", requestRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/conversations", conversationRouter);
-app.use("/api/admin",adminRouter)
-app.use("/api/appointment",appointmentRouter)
-app.use("/api/payments",paymentRouter)
+app.use("/api/admin",adminRouter);
+app.use("/api/appointment",appointmentRouter);
+app.use("/api/payments",paymentRouter);
 
 io.on('connection', (socket) => {
   console.log('New client connected');

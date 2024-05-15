@@ -99,7 +99,7 @@ const getOneDoctor = async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
-
+console.log(doctor);
     res.json(doctor);
   } catch (error) {
     console.error("Error fetching doctor:", error);
