@@ -174,7 +174,6 @@ const automateFill = async (req, res) => {
     });
     if (!patientMedicalInfo) {
       newreport.patientId = parseInt(patientId)
-      
       patientMedicalInfo = await prisma.medicalInfo.create(
         {
           data:newreport

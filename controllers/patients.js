@@ -81,7 +81,6 @@ const signin = async (req, res) => {
     res.status(200).json({ loggedUser, token, message: "Login succeeded" });
   } catch (error) {
     console.log(error);
-    console.log(error)
     res.status(500).send("Internal server error");
   }
 };
@@ -91,7 +90,6 @@ const signin = async (req, res) => {
 const getOneDoctor = async (req, res) => {
   try {
     const { doctorId } = req.params;
-
     const doctor = await prisma.doctor.findUnique({
       where: { id: parseInt(doctorId) },
     });
@@ -99,7 +97,6 @@ const getOneDoctor = async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
-console.log(doctor);
     res.json(doctor);
   } catch (error) {
     console.error("Error fetching doctor:", error);
@@ -212,7 +209,6 @@ const getInfo = async (req, res) => {
         }
        },
     });
-
     res.status(200).json(patientWithMedicalInfo);
   } catch (error) {
     res.status(404).send(error);
