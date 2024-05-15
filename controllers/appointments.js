@@ -7,7 +7,7 @@ const addAppointment = async (req, res) => {
 
   const app = { ...req.body,doctorId };
 
-  try {
+  try {  
     const newApp = await prisma.appointment.create({
       data: app,
     });
@@ -42,9 +42,33 @@ const getAppointements = async (req, res) => {
     res.status(401).json(error);
   }
 };
+const getPatientAppointements = async (req, res) => {
 
+  const patientId = req.patientId;
+
+  try {
+    const patient = await prisma.patient.findUnique({
+      where: {
+        id: patientId,
+      },
+    });
+    const appoitments = await prisma.appointment.findMany({
+      where: {
+        PatientName: patient.FullName,
+      },include:{
+        doctor:true
+      }
+    });
+    
+    res.status(201).json(appoitments);
+  } catch (error) {
+    
+    res.status(401).json(error);
+  }
+};
 /////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   addAppointment,
   getAppointements,
+  getPatientAppointements
 };
