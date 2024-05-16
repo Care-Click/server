@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const isDoctorAuthenticated=require('../middlewares/isDoctorAuthenticated.js')
 
 
 const {
@@ -7,7 +8,7 @@ const {
   } = require("../controllers/payment");
 
   router.post("/", add);
-  router.post ("/:id",verifypayment)
+  router.get ("/:id",isDoctorAuthenticated,verifypayment)
   
   
 module.exports = router;
