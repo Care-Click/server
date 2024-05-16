@@ -1,6 +1,6 @@
 const axios = require("axios");
 const prisma = require("../db/prisma");
-
+require('dotenv').config();
 
 
 
@@ -21,6 +21,7 @@ const add = async (req,res) => {
 await axios
 .post(url, payload)
 .then( async(result) => {
+
     res.json(result.data);
   })
   .catch((err) => {
@@ -30,6 +31,7 @@ await axios
 }
 
 const verifypayment = async (req,res) => {
+  
 const paymentId = req.params.id
 const url = `https://developers.flouci.com/api/verify_payment/ ${paymentId}`
 await axios.get(url,{headers : {
@@ -38,9 +40,19 @@ await axios.get(url,{headers : {
     'appsecret': process.env.FLOUCI_SECRET
   }}).
 then( async(result) => {
-    res.json(result.data);
+  if (result&&result.data&&result.data.result.status==='SUCCESS') {
+    const doctorId=req.doctorId
+     const update=    await prisma.doctor.update({
+    where: { id: doctorId },
+    data: {subscribed:true},
+  });
+ return  res.json(update);
+  }
+
+   
   })
   .catch((err) => {
+    console.log(err);
     res.json(err.message);
   });
 
