@@ -87,9 +87,6 @@ const signin = async (req, res) => {
     if (!doctor) {
       return res.status(404).json("doctor not found");
     }
-
-    
-
     const cofirmPassword = await bcrypt.compare(password, doctor.password);
 
     if (!cofirmPassword) {
@@ -100,7 +97,17 @@ const signin = async (req, res) => {
       return res.status(403).json("Sorry , you're not verified yet ")
     }
     if (doctor.verified && !doctor.subscribed ) {
-      return res.status(405).json("You have to subscribe.");
+      const subtoken = jwt.sign(
+        {
+          doctorId: doctor.id,
+          role: doctor.role,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
+      return res.status(405).json({mes:"You have to subscribe.",subtoken});
     }
     
     const token = jwt.sign(
