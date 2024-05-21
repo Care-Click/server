@@ -134,19 +134,26 @@ const signin = async (req, res) => {
 };
 // creating the doctor  medical experience
 const createMedExp = async (req, res) => {
+
   let { bio, medical_id } = req.body;
 
   const { doctorId } = req.params;
   const parsedId = JSON.parse(doctorId)
 
-  const card = req.files[0].buffer;
-
-  const image = await upload(card);
-
   try {
+
+    const uploadedImages = [];
+
+    // Loop through each file and upload it
+    for (const file of req.files) {
+      const imageBuffer = file.buffer;
+      const imageUrl = await upload(imageBuffer); // Replace with your upload function
+      uploadedImages.push(imageUrl); // Add the URL to the array
+    }
+
     let medicalExp = await prisma.medicalExp.create({
       data: {
-        id_card: image,
+        id_card: uploadedImages,
         bio,
         doctor_id: parsedId,
         medical_id,
