@@ -67,7 +67,7 @@ model Doctor {
 
 model MedicalExp {
   id         Int     @id @unique @default(autoincrement())
-  id_card    String
+  id_card    String[]
   bio        String
   doctor     Doctor? @relation(fields: [doctor_id], references: [id])
   doctor_id  Int?    @unique
